@@ -1,2 +1,3 @@
 # PolarStar
-Polarstar
+
+Developing sheet generator for Polar Star Management
