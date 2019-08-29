@@ -1,16 +1,16 @@
-Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-July-2019.xlsx
-Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-July-2019.xlsx
-Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-July-2019.xlsx
+Polar Star SNN QIHF - Rebate (Advisor) - Abdullah - July 2019.xls
+Polar Star SNN QIHF - Rebate (Advisor) - Abdullah - July 2019.xls
+Polar Star SNN QIHF - Rebate (Advisor) - Abdullah - July 2019.xls
 Admin File
 Advisor Split
 KEY
 Investor
 Investor
-Series
-Series
-Management Fee
-Performance Fee
-8
+Equity Attribution
+Equity Attribution
+Mngt Fee
+Perf Fee
+14
 1
 1
 Rosebank

@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['loadltd.py'],
-             pathex=['C:\\Users\\abud9\\Desktop\\Polar star\\Rebates Fund and SNN QLHF\\py36envtest\\venv_py36\\Scripts'],
+             pathex=['C:\\Users\\abud9\\Desktop\\Polar star\\Rebates Fund and SNN QLHF'],
              binaries=[],
              datas=[],
              hiddenimports=[],
