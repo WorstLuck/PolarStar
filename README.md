@@ -5,31 +5,39 @@ Sheet Generator.
 Note: Results.txt is just there to load previously saved form inputs.
 
 # Monthly generation steps:
-Executable can be found in SheetGen > dist launch it and wait for GUI to pop up, then press load previous and run the exe by pressing "Receive file" -  make sure that the excel files loaded are in the dist folder.
+1) Executable can be found in SheetGen > dist launch it and wait for GUI to pop up.
+2) Pick from the menu the Admin File name as well as the reference files for both Advisors and Key files.
+3) Write down the advisor name you wish to generate the invoice for
+4) Pick a date from the dropdown menu for the invoice
+5) Make sure the advanced options tab has the correct inputs (Refer to Advanced Options Inputs section at the end for explanations)
+6) Press "Receive file"
 
-Following this, the program will either:
-1) Create an invoice for the chosen advisor
-2) Return an excel file prefixed "J-" where it advises you to fill in the unmatched advisors
+Following the Receive file command the program will either:\
+1) Generate a master file for which it advises you to fill in unassigned advisors - during which you can rerun the "Receive file" command once you edit the file to generate the invoice.
+2) Ask you again to fill in the unassigned advisors in the master excel file if you haven't done so correctly.
+3) Generate the invoice
 
-If 2) occurs, then fill in each unmatched respective advisor in the generated file and rerun "receive file" to obtain the invoice.
+# Warnings to watch out for:
+There are several warnings that are generated:
+1) WARNING: You created x invoice but Admin File indicates another Date\
+This warning occurs when one tries to generate an invoice using an admin file from the previous month instead of the month specified by the Date
+2) ERROR: One of Management Fee or Performance Fee are spelled wrong\
+This indicates that either one of those two are spelled wrong, or, the data could not be written because of invalid entries in the advanced options tab
 
 # Quarterly generation steps:
-Press Quarterly? button and Input all three monthly sheets names that you generated, as well as the advisor name and date range.
+Press the "Quarterly" button and input all three monthly sheets names that you generated, as well as the advisor name and date range.
 
 Press merge files and the excel file should be created in dist.
 
 # Terminology:
-Admin refers to the admin file that is received\
-Advisor refers to the reference file to match Investor/series combinations\
+Admin File refers to the admin file that is received\
+Advisor Reference File refers to the reference file to match Investor/series combinations\
 Key refers to the key file (has to have columns (Mgnt Fee and Perf. Fee))\
 
-# Inputs:
-Admin/Advisor/Key file names - Specify File names for all (including xlsx/xls extension)\
+# Advanced Options Inputs:
 Admin/Advisor/Key sheet names - Specify the sheet names for all \
 Admin/Advisor Investor column names - Specify the name of the "Investor" column for both sheets\
 Admin/Advisor Series column names - Specify the name of the "Series" column for both sheets\
 Admin Management Fee/Performance fee column names - Specify the names of both of those that are in the admin file\
 Admin/Advisor/Key columns start row - Specify the starting row (on excel e.g 2 or 4) where the column headers begin.\
-Advisor Name - Specify the advisor to generate the sheet for\
-Date - Specify the date to name the file appropriatly\
 Column range - Specify the column range in excel to read the data until\
