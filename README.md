@@ -5,6 +5,8 @@ Sheet Generator.
 Note: Results.txt is just there to load previously saved form inputs.
 
 # Monthly generation steps:
+Note: The first step is to make sure Results.txt as well atleast one excel file with names "ltd" or "qlhf" in the dist folder.
+
 1) Executable can be found in SheetGen > dist launch it and wait for GUI to pop up.
 2) Pick from the menu the Admin File name as well as the reference files for both Advisors and Key files.
 3) Write down the advisor name you wish to generate the invoice for
@@ -25,6 +27,8 @@ This warning occurs when one tries to generate an invoice using an admin file fr
 This indicates that either one or both of those two are spelled wrong, or, the data could not be written because of invalid entries in the advanced options tab.
 
 # Quarterly generation steps:
+Note: The first step is to make sure that there exists atleast one advisor invoice containing "31st" in the file name.
+
 Press the "Quarterly" button and input all three monthly sheets names that you generated, as well as the advisor name and date range.
 
 Press merge files and the excel file should be created in dist.
