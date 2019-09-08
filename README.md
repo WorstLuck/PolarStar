@@ -22,7 +22,7 @@ There are several warnings that are generated:
 1) WARNING: You created x invoice but Admin File indicates another Date\
 This warning occurs when one tries to generate an invoice using an admin file from the previous month instead of the month specified by the date chosen.
 2) ERROR: One of Management Fee or Performance Fee are spelled wrong\
-This indicates that either one of those two are spelled wrong, or, the data could not be written because of invalid entries in the advanced options tab.
+This indicates that either one or both of those two are spelled wrong, or, the data could not be written because of invalid entries in the advanced options tab.
 
 # Quarterly generation steps:
 Press the "Quarterly" button and input all three monthly sheets names that you generated, as well as the advisor name and date range.
