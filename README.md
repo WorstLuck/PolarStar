@@ -1,5 +1,5 @@
 # Summary
-This is an application that automatically generates invoices associated with a particular index by taking a dataset in the form of an "xlsx" or "xls" file as well as two reference datasets that are used to match each index and associate the appropriate fees with based on their key/value pairs.
+This is an application that automatically generates invoices associated with a particular index by taking a dataset in the form of an "xlsx" or "xls" file as well as two reference datasets that are used to match each index and associate the appropriate fees to based on their key/value pairs.
 
 The invoice generated has two sheets, one is the respective rows sampled from the original dataset and the other is an aggregate calculation summing up two types of fees involved.
 
