@@ -1,4 +1,4 @@
-# Current interface (as of 2019/09/08)
+# Current interface (2019/09/08)
 ![Image of interface 2019/09/08](https://github.com/WorstLuck/PolarStar/blob/master/Current%20Interface.png)
 
 # Summary
