@@ -12,7 +12,7 @@ Note: Results.txt is just there to load previously saved form inputs.
 5) Make sure the advanced options tab has the correct inputs (Refer to Advanced Options Inputs section at the end for explanations)
 6) Press "Receive file"
 
-Following the Receive file command the program will either:
+Following the Receive File command the program will either:
 1) Generate a master file for which it advises you to fill in unassigned advisors - during which you can rerun the "Receive file" command once you edit the file to generate the invoice.
 2) Ask you again to fill in the unassigned advisors in the master excel file if you haven't done so correctly.
 3) Generate the invoice
