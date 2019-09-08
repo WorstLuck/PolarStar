@@ -5,7 +5,13 @@ Sheet Generator.
 Note: Results.txt is just there to load previously saved form inputs.
 
 # Monthly generation steps:
-Executable can be found in SheetGen > dist launch it and wait for GUI to pop up, then press load previous and run the exe, making sure that excel files needed are in the dist folder.
+Executable can be found in SheetGen > dist launch it and wait for GUI to pop up, then press load previous and run the exe by pressing "Receive file" -  make sure that the excel files loaded are in the dist folder.
+
+Following this, the program will either:
+1) Create an invoice for the chosen advisor
+2) Return an excel file prefixed "J-" where it advises you to fill in the unmatched advisors
+
+If 2) occurs, then fill in each unmatched respective advisor in the generated file and rerun "receive file" to obtain the invoice.
 
 # Quarterly generation steps:
 Press Quarterly? button and Input all three monthly sheets names that you generated, as well as the advisor name and date range.
