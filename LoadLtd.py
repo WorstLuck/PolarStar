@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[54]:
+# In[150]:
 
 
 import pandas as pd
@@ -36,7 +36,6 @@ def initialvalues(**d):
     global Perf_admin
     global currencytype
     global RefFiles
-    global AdminFiles
     global Months
     global Dates
     global Keys
@@ -55,13 +54,15 @@ def initialvalues(**d):
     global DateRange
     
     # Dropdown menu variables
-    RefFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower() 
-             or 'master' in element.lower()) and 'xlsx' in element.lower() or 'xls' in element.lower()]
-    AdminFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qlhf' in element.lower()) and 
-                 'master' not in element.lower() and ('xlsx' in element.lower() or 'xls' in element.lower())]
-    Months = ['January','February','March','April','May','June','July',
-              'August','September','October','November','December']
-    Dates = ['31st ' + element for element in Months]
+    if '.xlsx' in ' '.join(os.listdir()):
+        RefFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower() 
+                 or 'master' in element.lower()) and 'xlsx' in element.lower() or 'xls' in element.lower()]
+    else:
+        print("WARNING: No xls/xlsx files found in application directory or file names do not contain qlhf/ltd ")
+        RefFiles = ['NO SHEETS FOUND']
+    Months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':
+              'August','09':'September','10':'October','11':'November','12':'December'}
+    Dates = ['31st ' + element for element in Months.values()]
     AdvisorFiles = [element for element in os.listdir() if '31st' in element.lower()] + ['None']
     
     #Option menus for front page
@@ -69,12 +70,6 @@ def initialvalues(**d):
     option2 = OptionMenu(front,advisorvar,*RefFiles).grid(row = 1, column = 1)
     option3 = OptionMenu(front,keyvar,*RefFiles).grid(row = 1, column = 2)
     Month = OptionMenu(front,Date,*Dates).grid(row=3, column=1)
-
-# Set initial values (To reduce time)
-#     adminvar.set('Polar Star Limited_NAV Workbook_Ltd_31-08-2019.xlsx')
-#     advisorvar.set('Master 31st August Ltd')
-#     keyvar.set('Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-July-2019.xlsx')
-#     Date.set('31st August')
 
     # File name
     file_1 = adminvar.get()
@@ -89,7 +84,7 @@ def initialvalues(**d):
         Keys = Keyfile.index.tolist()
         Advisor = OptionMenu(front,Advisorname,*Keys).grid(row=3, column=0)
     except:
-        Keys = ['NO ADVISORS FOUND PLEASE REFRESH!']
+        Keys = ['NO ADVISORS FOUND - CHOOSE KEY FILE AND REFRESH!']
         Advisor = OptionMenu(front,Advisorname,*Keys).grid(row=3, column=0)
     
     # Quarterly variables
@@ -135,7 +130,7 @@ def colour(df,worksheet,row,workbook,color):
     'text_wrap': True,
     'valign': 'top',
     'fg_color': color,
-    'border': 1})
+    'border': 1, 'font_color':'white'})
     header_format.set_center_across()
     for col_num, value in enumerate(df.columns.values):
         worksheet.write(row, col_num + 1, value, header_format) 
@@ -157,37 +152,50 @@ def Merge():
     workbook2  = writer2.book
     # Formatting of entire book
     formatf = workbook2.add_format({'num_format': Whatformat(file1)}) 
+    formatblue = workbook2.add_format({'fg_color': '#122057','font_size':30})
+    format_zero = workbook2.add_format({'font_color': 'red'})
+    formatperc = workbook2.add_format({'num_format': '#,##0.00%'})
     try:
         df_f1 = pd.read_excel(file1)
         df_tf1 = pd.read_excel(file1, sheet_name = file1.split('31st')[0] + 'Fees')
         df_f1.to_excel(writer2, sheet_name = file1.split('31st')[0])
         worksheet_1 = writer2.sheets[file1.split('31st')[0]]
-        worksheet_1.set_column('F:U', 18, formatf)
-        worksheet_1.set_column('A:B', 20)
-        worksheet_1.set_column('C:D',30)
-        colour(df_f1,worksheet_1,0,workbook2,'#D7E4BC')
-        df_joined = df_tf1.iloc[[0]]
+        worksheet_1.set_column('A:D',35)
+        worksheet_1.set_column('E:E',35,formatperc)
+        worksheet_1.set_column('F:U', 35, formatf)
+        colour(df_f1,worksheet_1,0,workbook2,'#122057')
+        worksheet_1.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+        worksheet_1.conditional_format(1, 4, df_f1.shape[0],19 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+        worksheet_1.write('A1','',formatblue)
+        df_joined = abs(df_tf1.iloc[[0]])
         MgtFee = [float(df_tf1.iloc[3][0].split('(')[1].split('%')[0])/100]
         PerfFee = [float(df_tf1.iloc[3][1].split('(')[1].split('%')[0])/100]
-        print('{} Added as {}'.format(file1 + ' Sheet: ' + Monthname , str(file1).split('.xlsx')[0]))
+        print('{} Added as {}'.format(file1 + ' Sheet: ' + Monthname , str(file1).split('31st')[0]))
     except:
         print("ERROR: Please enter an invoice file!")
     
     try:
         df_f2 = pd.read_excel(file2)
         df_tf2 = pd.read_excel(file2, sheet_name = file2.split('31st')[0] + 'Fees')
-        print('Read file')
         df_f2.to_excel(writer2, sheet_name= file2.split('31st')[0])
-        print('Write to excel')
         worksheet_2 = writer2.sheets[file2.split('31st')[0]]
-        colour(df_f2,worksheet_2,0,workbook2,'#D7E4BC')
-        worksheet_2.set_column('F:U', 18, formatf)
-        worksheet_2.set_column('A:B', 20)
-        worksheet_2.set_column('C:D',30)
-        df_joined = pd.concat([df_tf1.iloc[[0]],df_tf2.iloc[[0]]])
+        colour(df_f2,worksheet_2,0,workbook2,'#122057')
+        worksheet_2.set_column('A:D',35)
+        worksheet_2.set_column('E:E',35,formatperc)
+        worksheet_2.set_column('F:U', 35, formatf)
+        worksheet_2.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+        worksheet_2.conditional_format(1, 4, df_f2.shape[0],19 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+        worksheet_2.write('A1','',formatblue)
+        df_joined = pd.concat([abs(df_tf1.iloc[[0]]),abs(df_tf2.iloc[[0]])])
         MgtFee.append(float(df_tf2.iloc[3][0].split('(')[1].split('%')[0])/100)
         PerfFee.append(float(df_tf2.iloc[3][1].split('(')[1].split('%')[0])/100)
-        print('{} Added as {}'.format(file2 + ' Sheet: ' + Monthname , str(file2).split('.xlsx')[0]))  
+        print('{} Added as {}'.format(file2 + ' Sheet: ' + Monthname , str(file2).split('31st')[0]))  
     except:
         print('WARNING: Invoice 2 not loaded')
     
@@ -196,21 +204,27 @@ def Merge():
         df_tf3 = pd.read_excel(file3, sheet_name = file3.split('31st')[0] + 'Fees')
         df_f3.to_excel(writer2, sheet_name= file3.split('31st')[0])
         worksheet_3 = writer2.sheets[file3.split('31st')[0]]
-        colour(df_f3,worksheet_3,0,workbook2,'#D7E4BC')
-        worksheet_3.set_column('F:U', 18, formatf)
-        worksheet_3.set_column('A:B', 20)
-        worksheet_3.set_column('C:D',30)
-        df_joined = pd.concat([df_tf1.iloc[[0]],df_tf2.iloc[[0]],df_tf3.iloc[[0]]])
+        colour(df_f3,worksheet_3,0,workbook2,'#122057')
+        worksheet_3.set_column('A:D',35)        
+        worksheet_3.set_column('E:E',35,formatperc)
+        worksheet_3.set_column('F:U', 35, formatf)
+        worksheet_3.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+        worksheet_3.conditional_format(1, 4, df_f3.shape[0],19 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+
+        worksheet_3.write('A1',None,formatblue)
+        df_joined = pd.concat([abs(df_tf1.iloc[[0]]),abs(df_tf2.iloc[[0]]),abs(df_tf3.iloc[[0]])])
         MgtFee.append(float(df_tf3.iloc[3][0].split('(')[1].split('%')[0])/100)
         PerfFee.append(float(df_tf3.iloc[3][1].split('(')[1].split('%')[0])/100)
-        print('{} Added as {}'.format(file3 + ' Sheet: ' + Monthname , str(file3).split('.xlsx')[0]))
+        print('{} Added as {}'.format(file3 + ' Sheet: ' + Monthname , str(file3).split('31st')[0]))
     except:
-        print("WARNING: Invoice 3 not loaded")  
-    
-    dfsum = pd.DataFrame([df_joined.sum()],index=['Total'])
-    Totals = [df_joined.iloc[: , 2].sum(),df_joined.iloc[: , 3].sum()]
-    TotalsFirst = [df_joined.iloc[: , 0].sum(),df_joined.iloc[: , 1].sum()]
-    df_portion = pd.DataFrame(data = [[df_joined.iloc[: , 2].sum(),df_joined.iloc[: , 3].sum()]],columns =
+        print("WARNING: Invoice 3 not loaded")     
+    dfsum = pd.DataFrame([abs(df_joined.sum())],index=['Total'])
+    Totals = [abs(df_joined.iloc[: , 2].sum()),abs(df_joined.iloc[: , 3].sum())]
+    TotalsFirst = [abs(df_joined.iloc[: , 0].sum()),abs(df_joined.iloc[: , 1].sum())]
+    df_portion = pd.DataFrame(data = [[abs(df_joined.iloc[: , 2].sum()),abs(df_joined.iloc[: , 3].sum())]],columns =
                               [df_joined.columns[0] + '\n' + '(' + " , ".join(str(x*100) + '%' for x in MgtFee) + ')', 
                                df_joined.columns[1] + '\n' + '(' + " , ".join(str(x*100) + '%' for x in PerfFee) + ')' ],
                                   index = ['Total payable'])
@@ -222,29 +236,30 @@ def Merge():
     worksheet_final.set_column('A:E',35,formatf)
     
     #Formattings
-    total_format = workbook2.add_format({'bold': True, 'bg_color':'#33B2FF','border': 1,'text_wrap': True,
+    total_format = workbook2.add_format({'bold': True, 'bg_color':'#FF5A34','border': 1,'text_wrap': True,
                                          'num_format': Whatformat(file1)})
-    hench_format = workbook2.add_format({'bold': True,'text_wrap': True,'num_format': Whatformat(file1)})
-    hench_format.set_center_across()
-    hench_format2 = workbook2.add_format({'bold': True,'text_wrap': True,'num_format': Whatformat(file1)})
+    total_format.set_center_across()
+    hench_format2 = workbook2.add_format({'bold': True,'text_wrap': True,'border':1,'num_format': Whatformat(file1)})
     
     worksheet_final.write(df_joined.shape[0],1,TotalsFirst[0],hench_format2)
     worksheet_final.write(df_joined.shape[0],2,TotalsFirst[1],hench_format2)
-    worksheet_final.write(df_joined.shape[0],3,Totals[0],total_format)
-    worksheet_final.write(df_joined.shape[0],4,Totals[1],total_format)
-    worksheet_final.write(df_joined.shape[0] + 4,1, Totals[0], hench_format)
-    worksheet_final.write(df_joined.shape[0] + 4,2, Totals[1], hench_format)
-    
-    
-    colour(df_joined,worksheet_final,0,workbook2,'#D7E4BC')
-    colour(df_portion,worksheet_final,df_joined.shape[0] + 3,workbook2,'#40E0D0')
+    worksheet_final.write(df_joined.shape[0],3,Totals[0],hench_format2)
+    worksheet_final.write(df_joined.shape[0],4,Totals[1],hench_format2)
+    worksheet_final.write(df_joined.shape[0] + 4,1, Totals[0], total_format)
+    worksheet_final.write(df_joined.shape[0] + 4,2, Totals[1], total_format)
+    colour(df_joined,worksheet_final,0,workbook2,'#122057')
+    colour(df_portion,worksheet_final,df_joined.shape[0] + 3,workbook2,'#122057')
+    worksheet_final.conditional_format(1, 1, df_joined.shape[0]-1,10 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+    worksheet_final.write('A1','',formatblue)
+    worksheet_final.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
     writer2.save()
-    
-
 # Main function that writes monthly invoices
 def Main(*args):
     # If the month name chosen does not match that of the admin file name then print warning
-    if Monthname.split()[1].lower() not in file_1.lower():
+    if Monthname.split()[1].lower() not in file_1.lower() and Months[file_1.lower().split('31')[1].split('-')[1]].lower()!= Monthname.split()[1].lower():
         print("WARNING: You created {} invoice but Admin File indicates another date".format(Monthname))
     #Attempt to load a master file of that month name else continue to except
     try:
@@ -296,7 +311,6 @@ def Main(*args):
         # Multiply percentages by 100
         df_join['%'] = df_join['%'].apply(lambda x: x*100)
         df_key.index = df_key.index.str.strip()
-
         # Create master writer instance 
         master_writer = pd.ExcelWriter('Master ' + Monthname + ' ' + currencytype + ".xlsx",engine='xlsxwriter')
         # Write the resulting dataframe into master writer with sheet name Advisor Split
@@ -326,16 +340,16 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname):
     
     # Second dataframe is summing the management fee and performance fee and putting them as a dataframe with index being
     # The date
-    df2 = pd.DataFrame(data = [[df1[Mgnt_admin].sum(),df1[Perf_admin].sum(), MngFee*df1[Mgnt_admin].sum(),
-                                PerfFee*df1[Perf_admin].sum()]],
+    df2 = pd.DataFrame(data = [[abs(df1[Mgnt_admin].sum()),abs(df1[Perf_admin].sum()), abs(MngFee*df1[Mgnt_admin].sum()),
+                                abs(PerfFee*df1[Perf_admin].sum())]],
                        columns =['Management Fee Total (excl Vat)','Performance Fee Total (excl Vat)', 
                                  'Management Fee payable (excl Vat)', 
                                  'Performance Fee payable (excl Vat)'],
                        index = [Advisor + ' (' + Monthname + ')'])
 
     # Third dataframe is multiplying and calculating the percentage payable for the respective advisor with date index too
-    df3 = pd.DataFrame(data = [[df2.iloc[: , 2].sum(),
-                               df2.iloc[: , 3].sum()]],
+    df3 = pd.DataFrame(data = [[abs(df2.iloc[: , 2].sum()),
+                               abs(df2.iloc[: , 3].sum())]],
                                 columns = ['Management Fee payable (' + str(MngFee*100) + '%)',
                                           'Performance Fee payable (' + str(PerfFee*100) + '%)'],index=df2.index)
     
@@ -352,32 +366,53 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname):
     # Call sheets instance
     worksheet1 = writer.sheets[Monthname]
     worksheet2 = writer.sheets[Advisor + ' Fees']
-
     # Formatting of entire workbook 
     format1 = workbook.add_format({'num_format': Whatformat(file_1)})
-    totalformat = workbook.add_format({'bold': True, 'bg_color':'#D7E4BC','border': 1,'text_wrap': True})
+    totalformat = workbook.add_format({'bold': True, 'bg_color':'#122057','border': 1,'text_wrap': True,
+                                       'font_color':'white'})
     totalformat.set_center_across()
-    finalformat = workbook.add_format({'bold': True, 'num_format': Whatformat(file_1)})
+    finalformat = workbook.add_format({'bold': True, 'num_format': Whatformat(file_1),
+                                       'font_color':'black','bg_color':'#B35909','border': 1})
     finalformat.set_center_across()
+    format7 = workbook.add_format({'fg_color': '#122057','font_size':30})
+    format8 = workbook.add_format({'num_format': '#,##0.00%'})
+    formatzero = workbook.add_format({'font_color': 'red'})
+    worksheet2.set_column('A:E',35,format1)
     
-    # Random format on first columns
-    worksheet2.write('B1','Management Fee Total (excl Vat)', totalformat)
-    worksheet2.write('C1','Performance Fee Total (excl Vat)', totalformat)
-    worksheet2.write('D1','Management Fee payable (excl Vat)',totalformat)
-    worksheet2.write('E1','Performance Fee payable (excl Vat)',totalformat)
-    worksheet2.write(5,1,df2.iloc[: , 2].sum(), finalformat)
-    worksheet2.write(5,2,df2.iloc[: , 3].sum(), finalformat)
+    # Prev
+    hench_format2 = workbook.add_format({'bold': True,'text_wrap': True,'num_format': Whatformat(file_1),'border':1,
+                                         'bg_color':'#FF5A34'})
+    hench_format2.set_center_across()
+    hench_format3 = workbook.add_format({'bold': True,'text_wrap': True,'num_format': Whatformat(file_1)})
     
-    # Set columns of first date sheet and second Advisor Fees sheet to be (Dollar or Rand and Size)
-    worksheet1.set_column('F:U', 18, format1)
-    worksheet2.set_column('B:E', 35, format1)
-    worksheet2.set_column('A:A', 35)
-    worksheet1.set_column('A:B', 20)
-    worksheet1.set_column('C:D',30)
+    worksheet2.write(df2.shape[0],1,df2.iloc[: , 0],hench_format3)
+    worksheet2.write(df2.shape[0],2,df2.iloc[: , 1],hench_format3)
+    worksheet2.write(df2.shape[0],3,df2.iloc[: , 2],hench_format3)
+    worksheet2.write(df2.shape[0],4,df2.iloc[: , 3],hench_format3)
+    worksheet2.write(df2.shape[0]+4,1,df2.iloc[: , 2].sum(), hench_format2)
+    worksheet2.write(df2.shape[0]+4,2,df2.iloc[: , 3].sum(), hench_format2)
     
-    # Colour all three dataframes using coloour function where wraps, bold, aligns, border, colour can be changed
-    colour(df1,worksheet1,0,workbook,'#D7E4BC')
-    colour(df3,worksheet2,df2.shape[0] + 3,workbook,'#40E0D0')
+    # Set columns of first date sheet and second Advisor Fees sheet to be (Dollar or Rand and Size)\
+    worksheet1.set_column('A:D', 35)
+    worksheet1.set_column('E:E', 35,format8)
+    worksheet1.set_column('F:U', 35, format1)
+    #Insert image
+    worksheet1.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+    worksheet2.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+    worksheet1.write('A1',None,format7)
+    worksheet2.write('A1',None,format7)
+    worksheet1.conditional_format(1, 4, df1.shape[0],19 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   formatzero})
+    worksheet2.conditional_format(1, 1, df2.shape[0]-1,10 , {'type':     'cell',
+                                      'criteria': '==',
+                                      'value':    0,
+                                      'format':   formatzero})
+    # Colour all three dataframes using colour function where wraps, bold, aligns, border, colour can be changed
+    colour(df1,worksheet1,0,workbook,'#122057')
+    colour(df2,worksheet2,0,workbook,'#122057')
+    colour(df3,worksheet2,df2.shape[0] + 3,workbook,'#122057')
     # Save the file
     writer.save()
     # Tell user that invoice has been written
@@ -400,7 +435,7 @@ if __name__ == '__main__':
     
     # Instantiate new instance which has title "Quarterly Invoice generator"
     new = tk.Toplevel(front)
-    new.title("Quarterly Invoice Generator")
+    new.title("Invoice Joiner")
     
     # Create front GUI labels and position them appropriately
     Labels_front = ["Admin File","Advisor Reference File","Key Reference File","Advisor Name","Date"]
@@ -418,7 +453,8 @@ if __name__ == '__main__':
     
     # Quarterly variable
     DateRangeEntry = Entry(new,width=20)
-    DateRangeEntry.grid(row=9,column = 1)
+    DateRangeEntry.grid(row=3,column = 1)
+    Label(new, text = 'Date Range').grid(row=2,column=1)
     
     # Front dropdown menu variables (Admin, advisor, and key files as well as Date and Advisor name)
     adminvar = StringVar(front)
@@ -500,7 +536,7 @@ if __name__ == '__main__':
     try:
         load(d,'disabled')
     except:
-        print('ERROR: Results.txt File cannot be found. Please paste it into the current directory!')
+        print('ERROR: results.txt File cannot be found. Please paste it into the current directory!')
     
     # Hide the Advanced options tab 
     master.withdraw()
@@ -510,20 +546,24 @@ if __name__ == '__main__':
     # Create quarterly invoices - Function contains GUI variables, labels, and positions.
     def quarterly():
         # Position the labels
-        for i in range (0,len(Q_Labels)):
-            Label(new, text = Q_Labels[i]).grid(row=i*2,column=1)
+        for i in range (0,len(Q_Labels)-2):
+            Label(new, text = Q_Labels[i]).grid(row=0,column=i)
         # Month option menus which take advisorfiles array that is any file with "31st" in it 
-        Month1 = OptionMenu(new, FirstMonth,*AdvisorFiles).grid(row=1,column=1)
-        Month2 = OptionMenu(new, SecondMonth,*AdvisorFiles).grid(row=3,column=1)
-        Month3 = OptionMenu(new, ThirdMonth,*AdvisorFiles).grid(row=5,column=1)
+        Month1 = OptionMenu(new, FirstMonth,*AdvisorFiles).grid(row=1,column=0)
+        Month2 = OptionMenu(new, SecondMonth,*AdvisorFiles).grid(row=1,column=1)
+        Month3 = OptionMenu(new, ThirdMonth,*AdvisorFiles).grid(row=1,column=2)
+        FirstMonth.set(AdvisorFiles[-1])
+        SecondMonth.set(AdvisorFiles[-1])
+        ThirdMonth.set(AdvisorFiles[-1])
         # Advisor option menu which takes Keys array that is the indices of the key file (empty in beginning until refresh)
-        Advisor1 = OptionMenu(new, Advisorname,*Keys).grid(row=7,column=1)
+        Advisor1 = OptionMenu(new, Advisorname,*Keys).grid(row=3,column=0)
+        Label(new, text = 'Advisor').grid(row=2,column=0)
         # Buttons to call merge function, destroy, and refresh
         b8 = Button(new, text='Merge files',command=lambda: 
-                    (initialvalues(**d),Merge()),bg = 'green').grid(row=10,column =1)
-        b10 = Button(new, text='Hide Menu',command=lambda: new.withdraw(),bg = 'IndianRed4').grid(row=10,column = 0,sticky=W)
+                    (initialvalues(**d),Merge()),bg = 'green').grid(row=4,column =1)
+        b10 = Button(new, text='Hide Menu',command=lambda: new.withdraw(),bg = 'IndianRed4').grid(row=4,column = 0,sticky=W)
         b11 = Button(new, text = 'Refresh',command = lambda: initialvalues(**d),
-                     bg='White').grid(row=11,column=0,sticky=W)
+                     bg='White').grid(row=4,column=2,sticky=W)
     
     # Advanced options tab buttons
     b0 = Button(master,text="Save inputs", command=lambda: save(),bg = 'DeepSkyBlue3').grid(row=19,column = 1)

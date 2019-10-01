@@ -3,7 +3,7 @@
 block_cipher = None
 
 
-a = Analysis(['LoadLtd.py'],
+a = Analysis(['loadltd.py'],
              pathex=['C:\\Users\\abud9\\Desktop\\Polar star\\Rebates Fund and SNN QLHF'],
              binaries=[],
              datas=[],
@@ -23,7 +23,7 @@ exe = EXE(pyz,
           a.zipfiles,
           a.datas,
           [],
-          name='LoadLtd',
+          name='loadltd',
           debug=False,
           bootloader_ignore_signals=False,
           strip=False,
