@@ -1,13 +1,13 @@
-Admin File
+200_Profit_Alloc
 Advisor Split
 KEY
 Investor
 Investor
 Series
-Series
+Equity Attribution
 Management Fee
 Performance Fee
-8
+4
 1
 1
-A:T
+A:Q
