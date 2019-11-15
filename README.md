@@ -58,3 +58,4 @@ Admin/Advisor Series column names - Specify the name of the "Series" column for 
 Admin Management Fee/Performance fee column names - Specify the names of both of those that are in the admin file\
 Admin/Advisor/Key columns start row - Specify the starting row (on excel e.g 2 or 4) where the column headers begin.\
 Column range - Specify the column range in excel to read the data until\
+Make Pivot Investor Name - Specify the Investor name (i.e RMB) for which to include with advisor invoices.
