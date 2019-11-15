@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 import pandas as pd
@@ -67,10 +67,10 @@ def initialvalues(**d):
     
     #Bank to pivot
     global Bank
+    
     # Dropdown menu variables
-    if '.xlsx' in ' '.join(os.listdir()):
-        RefFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower())
-                    and ('xlsx' in element.lower() or 'xls' in element.lower())]
+    if '.xlsx' in ' '.join(os.listdir()) or 'xls' in ' '.join(os.listdir()):
+        RefFiles = [element for element in os.listdir() if ('xlsx' in element.lower() or 'xls' in element.lower())]
         MasterFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower() 
                  or 'master' in element.lower()) and ('xlsx' in element.lower() or 'xls' in element.lower())]
     else:
@@ -82,7 +82,6 @@ def initialvalues(**d):
               'August','09':'September','10':'October','11':'November','12':'December'}
     Dates = ['31st ' + element for element in Months.values()]
     AdvisorFiles = [element for element in os.listdir() if '31st' in element.lower()] + ['None']
-    Rmbfiles = [element for element in os.listdir() if 'rmb' in element.lower()] + ['None']
     
     
     #Option menus for front page
@@ -90,11 +89,11 @@ def initialvalues(**d):
     option2 = OptionMenu(front,advisorvar,*MasterFiles).grid(row = 1, column = 1)
     option3 = OptionMenu(front,keyvar,*RefFiles).grid(row = 1, column = 2)
     Month = OptionMenu(front,Date,*Dates).grid(row=3, column=1)
-    RMBo = OptionMenu(front,RMBSplit,*Rmbfiles).grid(row=3, column=2)
+    RMBo = OptionMenu(front,RMBSplit,*RefFiles).grid(row=3, column=2)
     
     #Pivot menus
     adminfile = OptionMenu(Piv,adminvar,*RefFiles).grid(row = 4, column = 0)
-    RMBfile = OptionMenu(Piv,RMB,*Rmbfiles).grid(row = 2, column = 0)
+    RMBfile = OptionMenu(Piv,RMB,*RefFiles).grid(row = 2, column = 0)
     file_admin = RMB.get()
     admin = adminvar.get()
 
@@ -124,7 +123,7 @@ def initialvalues(**d):
         
     #Pivot trys
     try:
-        dfadmin = pd.read_excel(file_admin,sheet_name = 'sheet1')
+        dfadmin = pd.read_excel(file_admin)
         colist = [element for element in dfadmin.columns]
         Values = OptionMenu(Piv,ValuesName,*colist).grid(row = 2, column = 1)
         Broker = OptionMenu(Piv,BrokerCol,*colist).grid(row = 2, column = 2)
@@ -292,7 +291,7 @@ def Merge():
         worksheet_2.conditional_format(1, 4, df_f2.shape[0],19 , {'type':     'cell',
                                           'criteria': '==',
                                           'value':    0,
-                                          'format':   format_zero})
+                                          'format':   format_zermo})
         worksheet_2.write('A1','',formatblue)
         df_joined = pd.concat([abs(df_tf1.iloc[[0]]),abs(df_tf2.iloc[[0]])])
         MgtFee.append(float(df_tf2.iloc[3][0].split('(')[1].split('%')[0])/100)
