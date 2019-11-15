@@ -1,5 +1,5 @@
 # Current interface
-![Image of interface 2019/09/08](https://github.com/WorstLuck/PolarStar/blob/master/Current%20Interface.png)
+![Image of interface 2019/09/08](https://github.com/WorstLuck/PolarStar/blob/master/Code/Current%20Interface.png)
 
 # Summary
 This is an application that automatically generates invoices associated with a particular index by taking a dataset in the form of an "xlsx" or "xls" file as well as two reference datasets that are used to match each index and associate the appropriate fees to based on their key/value pairs. The user then has an option to merge invoices as well as create pivot tables based on their chosen index. 
