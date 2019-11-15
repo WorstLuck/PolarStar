@@ -330,25 +330,29 @@
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\__init__.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.packaging.specifiers',
+  ('pkg_resources._vendor.packaging.__about__',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\specifiers.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\__about__.py',
    'PYMODULE'),
   ('pkg_resources._vendor.packaging.markers',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\markers.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.appdirs',
+  ('pkg_resources._vendor',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\appdirs.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\__init__.py',
    'PYMODULE'),
-  ('win32com.shell.shellcon',
+  ('pkg_resources._vendor.packaging._compat',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\win32comext\\shell\\shellcon.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\_compat.py',
    'PYMODULE'),
-  ('win32com.shell',
+  ('pkg_resources._vendor.packaging.version',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\win32comext\\shell\\__init__.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\version.py',
+   'PYMODULE'),
+  ('pkg_resources._vendor.packaging.utils',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\utils.py',
    'PYMODULE'),
   ('pkg_resources._vendor.packaging',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
@@ -358,9 +362,9 @@
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\six.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.packaging.version',
+  ('pkg_resources._vendor.packaging.requirements',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\version.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\requirements.py',
    'PYMODULE'),
   ('pkg_resources._vendor.pyparsing',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
@@ -391,29 +395,25 @@
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\win32\\lib\\netbios.py',
    'PYMODULE'),
-  ('pkg_resources._vendor',
+  ('pkg_resources._vendor.appdirs',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\__init__.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\appdirs.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.packaging._compat',
+  ('win32com.shell.shellcon',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\_compat.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\win32comext\\shell\\shellcon.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.packaging.requirements',
+  ('win32com.shell',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\requirements.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\win32comext\\shell\\__init__.py',
    'PYMODULE'),
   ('pkg_resources._vendor.packaging._structures',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\_structures.py',
    'PYMODULE'),
-  ('pkg_resources._vendor.packaging.__about__',
+  ('pkg_resources._vendor.packaging.specifiers',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\__about__.py',
-   'PYMODULE'),
-  ('pkg_resources._vendor.packaging.utils',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\utils.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pkg_resources\\_vendor\\packaging\\specifiers.py',
    'PYMODULE'),
   ('__main__',
    'C:\\Users\\abud9\\Desktop\\Polar star\\Rebates Fund and SNN '
@@ -891,11 +891,20 @@
   ('platform',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\platform.py',
    'PYMODULE'),
+  ('token',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\token.py',
+   'PYMODULE'),
+  ('tokenize',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\tokenize.py',
+   'PYMODULE'),
   ('urllib.parse',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\urllib\\parse.py',
    'PYMODULE'),
   ('tempfile',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\tempfile.py',
+   'PYMODULE'),
+  ('subprocess',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\subprocess.py',
    'PYMODULE'),
   ('tty',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\tty.py',
@@ -1041,6 +1050,9 @@
   ('shutil',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\shutil.py',
    'PYMODULE'),
+  ('selectors',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\selectors.py',
+   'PYMODULE'),
   ('socket',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\socket.py',
    'PYMODULE'),
@@ -1065,6 +1077,12 @@
   ('string',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\string.py',
    'PYMODULE'),
+  ('_threading_local',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\_threading_local.py',
+   'PYMODULE'),
+  ('threading',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\threading.py',
+   'PYMODULE'),
   ('_compat_pickle',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\_compat_pickle.py',
    'PYMODULE'),
@@ -1077,11 +1095,23 @@
   ('pprint',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\pprint.py',
    'PYMODULE'),
+  ('contextlib',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\contextlib.py',
+   'PYMODULE'),
   ('unittest.case',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\unittest\\case.py',
    'PYMODULE'),
   ('unittest.suite',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\unittest\\suite.py',
+   'PYMODULE'),
+  ('stat',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\stat.py',
+   'PYMODULE'),
+  ('genericpath',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\genericpath.py',
+   'PYMODULE'),
+  ('posixpath',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\posixpath.py',
    'PYMODULE'),
   ('fnmatch',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\fnmatch.py',
@@ -1095,47 +1125,14 @@
   ('unittest.main',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\unittest\\main.py',
    'PYMODULE'),
+  ('signal',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\signal.py',
+   'PYMODULE'),
   ('unittest.signals',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\unittest\\signals.py',
    'PYMODULE'),
   ('unittest',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\unittest\\__init__.py',
-   'PYMODULE'),
-  ('doctest',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\doctest.py',
-   'PYMODULE'),
-  ('_py_abc',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\_py_abc.py',
-   'PYMODULE'),
-  ('stat',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\stat.py',
-   'PYMODULE'),
-  ('genericpath',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\genericpath.py',
-   'PYMODULE'),
-  ('posixpath',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\posixpath.py',
-   'PYMODULE'),
-  ('signal',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\signal.py',
-   'PYMODULE'),
-  ('contextlib',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\contextlib.py',
-   'PYMODULE'),
-  ('_threading_local',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\_threading_local.py',
-   'PYMODULE'),
-  ('threading',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\threading.py',
-   'PYMODULE'),
-  ('selectors',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\selectors.py',
-   'PYMODULE'),
-  ('subprocess',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\subprocess.py',
-   'PYMODULE'),
-  ('token',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\token.py',
    'PYMODULE'),
   ('struct',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\struct.py',
@@ -1149,8 +1146,11 @@
   ('argparse',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\argparse.py',
    'PYMODULE'),
-  ('tokenize',
-   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\tokenize.py',
+  ('doctest',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\doctest.py',
+   'PYMODULE'),
+  ('_py_abc',
+   'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\_py_abc.py',
    'PYMODULE'),
   ('copy',
    'C:\\Users\\abud9\\AppData\\Local\\Programs\\Python\\Python37-32\\lib\\copy.py',
@@ -2162,33 +2162,13 @@
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\__init__.py',
    'PYMODULE'),
-  ('setuptools._vendor.packaging',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\__init__.py',
-   'PYMODULE'),
-  ('setuptools._vendor.packaging._structures',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\_structures.py',
-   'PYMODULE'),
-  ('setuptools._vendor.packaging._compat',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\_compat.py',
-   'PYMODULE'),
   ('setuptools._vendor.packaging.requirements',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\requirements.py',
    'PYMODULE'),
-  ('setuptools._vendor.packaging.utils',
+  ('setuptools._vendor.packaging.__about__',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\utils.py',
-   'PYMODULE'),
-  ('setuptools._vendor.six',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\six.py',
-   'PYMODULE'),
-  ('setuptools._vendor.packaging.version',
-   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\version.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\__about__.py',
    'PYMODULE'),
   ('setuptools._vendor.packaging.markers',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
@@ -2206,9 +2186,29 @@
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\pyparsing.py',
    'PYMODULE'),
-  ('setuptools._vendor.packaging.__about__',
+  ('setuptools._vendor.packaging',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
-   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\__about__.py',
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\__init__.py',
+   'PYMODULE'),
+  ('setuptools._vendor.packaging._structures',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\_structures.py',
+   'PYMODULE'),
+  ('setuptools._vendor.packaging.version',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\version.py',
+   'PYMODULE'),
+  ('setuptools._vendor.packaging.utils',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\utils.py',
+   'PYMODULE'),
+  ('setuptools._vendor.six',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\six.py',
+   'PYMODULE'),
+  ('setuptools._vendor.packaging._compat',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\setuptools\\_vendor\\packaging\\_compat.py',
    'PYMODULE'),
   ('setuptools.msvc',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
@@ -2994,6 +2994,214 @@
   ('pandas.io.html',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
    'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\pandas\\io\\html.py',
+   'PYMODULE'),
+  ('bs4',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\__init__.py',
+   'PYMODULE'),
+  ('bs4.element',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\element.py',
+   'PYMODULE'),
+  ('bs4.formatter',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\formatter.py',
+   'PYMODULE'),
+  ('soupsieve',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\__init__.py',
+   'PYMODULE'),
+  ('soupsieve.css_parser',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\css_parser.py',
+   'PYMODULE'),
+  ('soupsieve.css_match',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\css_match.py',
+   'PYMODULE'),
+  ('soupsieve.css_types',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\css_types.py',
+   'PYMODULE'),
+  ('soupsieve.util',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\util.py',
+   'PYMODULE'),
+  ('soupsieve.__meta__',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\soupsieve\\__meta__.py',
+   'PYMODULE'),
+  ('bs4.dammit',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\dammit.py',
+   'PYMODULE'),
+  ('chardet',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\__init__.py',
+   'PYMODULE'),
+  ('chardet.version',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\version.py',
+   'PYMODULE'),
+  ('chardet.universaldetector',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\universaldetector.py',
+   'PYMODULE'),
+  ('chardet.sbcsgroupprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\sbcsgroupprober.py',
+   'PYMODULE'),
+  ('chardet.langturkishmodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langturkishmodel.py',
+   'PYMODULE'),
+  ('chardet.hebrewprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\hebrewprober.py',
+   'PYMODULE'),
+  ('chardet.charsetprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\charsetprober.py',
+   'PYMODULE'),
+  ('chardet.langhebrewmodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langhebrewmodel.py',
+   'PYMODULE'),
+  ('chardet.langthaimodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langthaimodel.py',
+   'PYMODULE'),
+  ('chardet.langbulgarianmodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langbulgarianmodel.py',
+   'PYMODULE'),
+  ('chardet.langgreekmodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langgreekmodel.py',
+   'PYMODULE'),
+  ('chardet.langcyrillicmodel',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\langcyrillicmodel.py',
+   'PYMODULE'),
+  ('chardet.sbcharsetprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\sbcharsetprober.py',
+   'PYMODULE'),
+  ('chardet.mbcsgroupprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\mbcsgroupprober.py',
+   'PYMODULE'),
+  ('chardet.euctwprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\euctwprober.py',
+   'PYMODULE'),
+  ('chardet.mbcssm',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\mbcssm.py',
+   'PYMODULE'),
+  ('chardet.chardistribution',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\chardistribution.py',
+   'PYMODULE'),
+  ('chardet.jisfreq',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\jisfreq.py',
+   'PYMODULE'),
+  ('chardet.big5freq',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\big5freq.py',
+   'PYMODULE'),
+  ('chardet.gb2312freq',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\gb2312freq.py',
+   'PYMODULE'),
+  ('chardet.euckrfreq',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\euckrfreq.py',
+   'PYMODULE'),
+  ('chardet.euctwfreq',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\euctwfreq.py',
+   'PYMODULE'),
+  ('chardet.codingstatemachine',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\codingstatemachine.py',
+   'PYMODULE'),
+  ('chardet.mbcharsetprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\mbcharsetprober.py',
+   'PYMODULE'),
+  ('chardet.big5prober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\big5prober.py',
+   'PYMODULE'),
+  ('chardet.cp949prober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\cp949prober.py',
+   'PYMODULE'),
+  ('chardet.euckrprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\euckrprober.py',
+   'PYMODULE'),
+  ('chardet.gb2312prober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\gb2312prober.py',
+   'PYMODULE'),
+  ('chardet.eucjpprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\eucjpprober.py',
+   'PYMODULE'),
+  ('chardet.jpcntx',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\jpcntx.py',
+   'PYMODULE'),
+  ('chardet.sjisprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\sjisprober.py',
+   'PYMODULE'),
+  ('chardet.utf8prober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\utf8prober.py',
+   'PYMODULE'),
+  ('chardet.latin1prober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\latin1prober.py',
+   'PYMODULE'),
+  ('chardet.escprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\escprober.py',
+   'PYMODULE'),
+  ('chardet.escsm',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\escsm.py',
+   'PYMODULE'),
+  ('chardet.enums',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\enums.py',
+   'PYMODULE'),
+  ('chardet.charsetgroupprober',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\charsetgroupprober.py',
+   'PYMODULE'),
+  ('chardet.compat',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\chardet\\compat.py',
+   'PYMODULE'),
+  ('bs4.builder',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\builder\\__init__.py',
+   'PYMODULE'),
+  ('bs4.builder._lxml',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\builder\\_lxml.py',
+   'PYMODULE'),
+  ('bs4.builder._html5lib',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\builder\\_html5lib.py',
+   'PYMODULE'),
+  ('bs4.builder._htmlparser',
+   'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '
+   'qlhf\\py36envtest\\venv_py36\\lib\\site-packages\\bs4\\builder\\_htmlparser.py',
    'PYMODULE'),
   ('pandas.util._print_versions',
    'c:\\users\\abud9\\desktop\\polar star\\rebates fund and snn '

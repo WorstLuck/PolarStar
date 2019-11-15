@@ -12,3 +12,4 @@ Performance Fee
 1
 A:T
 Rand Merchant Bank a Division of First Rand Bank Limited CPPI
+Opening Allocation Value

@@ -10,7 +10,6 @@ from tkinter import *
 import os
 
 # Initialise variables
-
 def initialvalues(**d):
     print('--------------------------------')
     print("Starting initialisation process")
@@ -60,8 +59,9 @@ def initialvalues(**d):
     global Values
     global Broker
     global RmbFileFinal
+    global openalloc
     
-    #Stupid excel
+    #Stupid excel cant name sheets with slashes...
     global fee_sheet
     global AdvisorClean
     
@@ -133,9 +133,11 @@ def initialvalues(**d):
         Values = OptionMenu(Piv,ValuesName,*K).grid(row= 2,column=1)
         Broker = OptionMenu(Piv,BrokerCol,*K).grid(row = 2, column = 2)
         
+    #Makepivot variables
     Values = ValuesName.get()
     Broker = BrokerCol.get()
     Bank = str(d['e17'].get())
+    openalloc = str(d['e18'].get())
     
     # Quarterly variables
     file1 = FirstMonth.get()
@@ -201,14 +203,13 @@ def Whatformat(file_1):
         return RandFormat
     
 #Make pivot function
-def makepivot(*args):
-    
+def makepivot(*args):   
     #RMB file
     dfadmin = pd.read_excel(file_admin)
     adminfile = pd.read_excel(admin,sheet_name=sheet_name_admin,usecols = Range,skiprows=skiprows_admin-1)
     adminfile = adminfile[adminfile[Investor_admin].notnull() & adminfile[Series_admin].notnull()].reset_index(drop=True)
     adminsum = adminfile[adminfile[Investor_admin] == Bank].reset_index(drop = True)
-    adminsumtot = adminsum['Opening Allocation Value'].sum()
+    adminsumtot = adminsum[openalloc].sum()
     
     PivotData = pd.DataFrame(columns = ['Advisor','Total Sum','Percentage RMB'])
     for element in list(dfadmin[Broker].unique()):
@@ -331,9 +332,9 @@ def Merge():
                                   index = ['Total payable'])
 
     df_joined = pd.concat([df_joined,dfsum])
-    df_joined.to_excel(writer2, sheet_name = fee_sheet)
-    df_portion.to_excel(writer2, sheet_name = fee_sheet,startrow = df_joined.shape[0] + 3)
-    worksheet_final = writer2.sheets[fee_sheet]
+    df_joined.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees')
+    df_portion.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees' ,startrow = df_joined.shape[0] + 3)
+    worksheet_final = writer2.sheets[file1.split('31st')[0] + 'Fees']
     worksheet_final.set_column('A:E',35,formatf)
     
     #Formattings
@@ -613,7 +614,7 @@ if __name__ == '__main__':
              "Key Sheet Name","Admin investor column name","Advisor investor column name","Admin series column name",
               "Advisor series column name","Admin Management Fee column name","Admin Performance Fee column name",
               "Admin columns start row","Advisor columns start row","Key columns start row","Column range (e.g: A:T)",
-             "Make Pivot Investor Name"]
+             "Make Pivot Investor Name","Opening Allocation Value column name"]
     
     # Create Quarterly tab labels
     Q_Labels = ["Invoice 1","Invoice 2","Invoice 3"]
@@ -633,9 +634,10 @@ if __name__ == '__main__':
     Label(master, text = Labels[11]).grid(row = 10, column = 2)
     Label(master, text = Labels[12]).grid(row = 12, column = 2)
     Label(master, text = Labels[13]).grid(row = 13, column = 0)
+    Label(master, text = Labels[14]).grid(row = 13, column = 1)
     
     # Make dictionary with keys and values being entries
-    for i in range (4,18):
+    for i in range (4,19):
         d["e{0}".format(i)] = Entry(master,width = 60)
 
     d["e4"].grid(row = 3, column = 0)
@@ -652,6 +654,7 @@ if __name__ == '__main__':
     d["e15"].grid(row = 11, column = 2)
     d["e16"].grid(row = 13, column = 2)
     d['e17'].grid(row = 14, column = 0)
+    d['e18'].grid(row = 14, column = 1)
     
     # Define variable that disables or enables grid in Advanced options tab
     var1 = IntVar()
@@ -747,4 +750,10 @@ if __name__ == '__main__':
     initialvalues(**d)
     # Run main loop
     mainloop()
+
+
+# In[ ]:
+
+
+
 
