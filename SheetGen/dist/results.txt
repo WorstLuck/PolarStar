@@ -1,13 +1,14 @@
-200_Profit_Alloc
+200_Profit Alloc
 Advisor Split
 KEY
 Investor
 Investor
 Series
-Equity Attribution
+Series
 Management Fee
 Performance Fee
-4
+8
 1
 1
-A:Q
+A:T
+Rand Merchant Bank a Division of First Rand Bank Limited CPPI

@@ -36,6 +36,7 @@ def initialvalues(**d):
     global Perf_admin
     global currencytype
     global RefFiles
+    global MasterFiles
     global Months
     global Dates
     global Keys
@@ -51,7 +52,6 @@ def initialvalues(**d):
     global file1
     global file2
     global file3
-    global DateRange
 
     #Pivot globals
     global adminfile
@@ -61,13 +61,22 @@ def initialvalues(**d):
     global Broker
     global RmbFileFinal
     
+    #Stupid excel
+    global fee_sheet
+    global AdvisorClean
+    
+    #Bank to pivot
+    global Bank
     # Dropdown menu variables
     if '.xlsx' in ' '.join(os.listdir()):
-        RefFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower() 
-                 or 'master' in element.lower()) and 'xlsx' in element.lower() or 'xls' in element.lower()]
+        RefFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower())
+                    and ('xlsx' in element.lower() or 'xls' in element.lower())]
+        MasterFiles = [element for element in os.listdir() if ('ltd' in element.lower() or 'qihf' in element.lower() 
+                 or 'master' in element.lower()) and ('xlsx' in element.lower() or 'xls' in element.lower())]
     else:
         print("WARNING: No xls/xlsx files found in application directory or file names do not contain qihf/ltd ")
         RefFiles = ['NO SHEETS FOUND']
+        MasterFiles = ['NO SHEETS FOUND']
         
     Months = {'01':'January','02':'February','03':'March','04':'April','05':'May','06':'June','07':'July','08':
               'August','09':'September','10':'October','11':'November','12':'December'}
@@ -78,7 +87,7 @@ def initialvalues(**d):
     
     #Option menus for front page
     option1 = OptionMenu(front,adminvar,*RefFiles).grid(row = 1, column = 0)
-    option2 = OptionMenu(front,advisorvar,*RefFiles).grid(row = 1, column = 1)
+    option2 = OptionMenu(front,advisorvar,*MasterFiles).grid(row = 1, column = 1)
     option3 = OptionMenu(front,keyvar,*RefFiles).grid(row = 1, column = 2)
     Month = OptionMenu(front,Date,*Dates).grid(row=3, column=1)
     RMBo = OptionMenu(front,RMBSplit,*Rmbfiles).grid(row=3, column=2)
@@ -89,12 +98,11 @@ def initialvalues(**d):
     file_admin = RMB.get()
     admin = adminvar.get()
 
-# # # Set initial values (To reduce time)
-#     adminvar.set('Polar Star SNN QIHF_NAV Workbook_31 -08-2019_ - Rebates.xls')
-#     advisorvar.set('Master 31st July QIHF.xlsx')
-#     keyvar.set('Polar Star SNN QIHF - Rebate (Advisor) - Abdullah - July 2019.xls')
-#     Date.set('31st July')
-#     RMBSplit.set('RMB_split.xlsx')
+# # # # Set initial values (To reduce time)
+#     adminvar.set('Polar Star Ltd_NAV Workbook_31-10-2019.xlsx')
+#     advisorvar.set('Master 31st October Ltd.xlsx')
+#     keyvar.set('Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-August-2019.xlsx')
+# #     Date.set('31st September')
 
     # File name
     file_1 = adminvar.get()
@@ -116,25 +124,24 @@ def initialvalues(**d):
         
     #Pivot trys
     try:
-        dfadmin = pd.read_excel(file_admin,sheet_name = 'Breakdown from RMB')
+        dfadmin = pd.read_excel(file_admin,sheet_name = 'sheet1')
         colist = [element for element in dfadmin.columns]
         Values = OptionMenu(Piv,ValuesName,*colist).grid(row = 2, column = 1)
         Broker = OptionMenu(Piv,BrokerCol,*colist).grid(row = 2, column = 2)
     except:
-        print('Please refresh to get column list')
         K = ['None']
         Values = OptionMenu(Piv,ValuesName,*K).grid(row= 2,column=1)
         Broker = OptionMenu(Piv,BrokerCol,*K).grid(row = 2, column = 2)
         
     Values = ValuesName.get()
     Broker = BrokerCol.get()
+    Bank = str(d['e17'].get())
     
     # Quarterly variables
     file1 = FirstMonth.get()
     file2 = SecondMonth.get()
     file3 = ThirdMonth.get()
     Advisor = Advisorname.get()
-    DateRange = DateRangeEntry.get()
     
     #Admin_File
     sheet_name_admin = str(d['e4'].get())
@@ -165,6 +172,13 @@ def initialvalues(**d):
         currencytype = 'QIHF'
     print("Variables initialised")
     
+    if '/' in Advisor:
+        fee_sheet = Advisor.replace("/","and") + ' Fees'
+    else:
+        fee_sheet = Advisor + ' Fees'
+    
+    AdvisorClean = fee_sheet.split(' Fees')[0]
+
 #Colours headings and formattings 
 def colour(df,worksheet,row,workbook,color):
     header_format = workbook.add_format({
@@ -188,15 +202,16 @@ def Whatformat(file_1):
     
 #Make pivot function
 def makepivot(*args):
-    dfadmin = pd.read_excel(file_admin,sheet_name = "Breakdown from RMB")
     
-    adminfile = pd.read_excel(admin,sheet_name=sheet_name_admin,skiprows=11)
+    #RMB file
+    dfadmin = pd.read_excel(file_admin)
+    adminfile = pd.read_excel(admin,sheet_name=sheet_name_admin,usecols = Range,skiprows=skiprows_admin-1)
     adminfile = adminfile[adminfile[Investor_admin].notnull() & adminfile[Series_admin].notnull()].reset_index(drop=True)
-    adminsum = adminfile[adminfile[Investor_admin] == 'Rand Merchant Bank a Division of First Rand Bank Limited CPPI'].reset_index(drop = True)
-    adminsumtot = adminsum['Opening NAV'].sum()
+    adminsum = adminfile[adminfile[Investor_admin] == Bank].reset_index(drop = True)
+    adminsumtot = adminsum['Opening Allocation Value'].sum()
     
     PivotData = pd.DataFrame(columns = ['Advisor','Total Sum','Percentage RMB'])
-    for element in list(dfadmin['Broker Corporate'].unique()):
+    for element in list(dfadmin[Broker].unique()):
         Investor_frame = dfadmin[dfadmin[Broker] == element]
         InvestorSum = Investor_frame[Values].sum()
         TotalSum = dfadmin[Values].sum()
@@ -230,9 +245,10 @@ def makepivot(*args):
     writer_admin.save()   
     
 #Function that merges invoices together (requires editing)
-def Merge():
+def Merge():  
+    print(file1,file2,file3)
     # Instantiate writer 
-    writer2 = pd.ExcelWriter(Advisor + ' ' + DateRange + '.xlsx', engine='xlsxwriter')
+    writer2 = pd.ExcelWriter(file1.split('.xlsx')[0] + ' Full' + '.xlsx', engine='xlsxwriter')
     # Instantiate book
     workbook2  = writer2.book
     # Formatting of entire book
@@ -315,9 +331,9 @@ def Merge():
                                   index = ['Total payable'])
 
     df_joined = pd.concat([df_joined,dfsum])
-    df_joined.to_excel(writer2, sheet_name = Advisor + ' Fees')
-    df_portion.to_excel(writer2, sheet_name = Advisor + ' Fees',startrow = df_joined.shape[0] + 3)
-    worksheet_final = writer2.sheets[Advisor + ' Fees']
+    df_joined.to_excel(writer2, sheet_name = fee_sheet)
+    df_portion.to_excel(writer2, sheet_name = fee_sheet,startrow = df_joined.shape[0] + 3)
+    worksheet_final = writer2.sheets[fee_sheet]
     worksheet_final.set_column('A:E',35,formatf)
     
     #Formattings
@@ -341,6 +357,7 @@ def Merge():
     worksheet_final.write('A1','',formatblue)
     worksheet_final.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
     writer2.save()
+    
 # Main function that writes monthly invoices
 def Main(*args):
     # If the month name chosen does not match that of the admin file name then print warning
@@ -348,7 +365,7 @@ def Main(*args):
         if Monthname.split()[1].lower() not in file_1.lower() and Months[file_1.lower().split('31')[1].split('-')[1]].lower()!= Monthname.split()[1].lower():
             print("WARNING: You created {} invoice but Admin File indicates another date".format(Monthname))
     except:
-        print('WARNING: Strange admin file name')
+        print('WARNING: File name does not contain a date in the format (d-m-y) or month names!')
     #Attempt to load a master file of that month name else continue to except
     try:
         print("Checking if Master exists for that admin file")
@@ -364,8 +381,9 @@ def Main(*args):
             # Try to write else give error that inputs are wrong
             try:
                 print('Trying to write invoice for {}'.format(Advisor))
-                write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit)
+                write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit,fee_sheet)
             except:
+                print(Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit,fee_sheet)
                 print("ERROR: Some inputs are invalid in Advanced options or File is not closed!")
         else:
             print("WARNING: Not all advisors have been assigned in {} file!".format(df_join.name))
@@ -379,6 +397,8 @@ def Main(*args):
         
         # Load admin dataframe where investor and series columns are not null
         df_admin = df_admin[df_admin[Investor_admin].notnull() & df_admin[Series_admin].notnull()].reset_index(drop=True)
+        df_admin = df_admin.loc[df_admin[Investor_admin]!= str(Investor_admin)]
+        
         # Drop duplicate cols
         df_admin.dropna(axis=1,how='all',inplace=True)
         # Rename advisor columns to match those of admin
@@ -398,7 +418,7 @@ def Main(*args):
         df_join.columns = df_join.columns.str.strip()
         # Multiply percentages by 100
         try:
-            df_join['%'] = df_join['%'].apply(lambda x: x*100)
+            df_join['%'] = df_join['%'].apply(lambda x: x)
         except:
             print('ERROR: No percentage column (%) present in admin file!')
         df_key.index = df_key.index.str.strip()
@@ -421,20 +441,19 @@ def Main(*args):
         # Save the Master file
         master_writer.save()
 
-def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit):
+def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit,fee_sheet):
     # Calculate management and performance fees based on Mgnt Fee and Perf. Fee in Key file
     MngFee = round((1 - 0.5*df_key.loc[Advisor]['Mgnt Fee']),5)
     PerfFee = round((1 - 0.05*df_key.loc[Advisor]['Perf. Fee']),5)
     
     # First dataframe is selecting the advisor you chose
     df1 = df_join[df_join['Advisor'] == Advisor].reset_index(drop = True)
-    
+
     # RMB Dataframes
     try:
         df4 = pd.read_excel(RmbFileFinal,sheet_name = "RMB split")
         df4 = df4[df4['Advisor'].str.contains(Advisor,na=False)]
         Percentage = float(str(list(df4['Percentage RMB'])[0]).split('%')[0])/100
-
         df5 = pd.read_excel(RmbFileFinal,sheet_name = "Admin_RMB")
         df5['Advisor'] = Advisor
         df5= df5[['Advisor'] + [col for col in df5.columns if col != 'Advisor']]
@@ -443,8 +462,7 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
         df1 = pd.concat([df1,df5],ignore_index=True,sort=False)
     except:
         print("WARNING: No RMB file selected ")
-    
-    
+       
     # Second dataframe is summing the management fee and performance fee and putting them as a dataframe with index being
     # The date
     df2 = pd.DataFrame(data = [[abs(df1[Mgnt_admin].sum()),abs(df1[Perf_admin].sum()), abs(MngFee*df1[Mgnt_admin].sum()),
@@ -453,7 +471,6 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
                                  'Management Fee payable (excl Vat)', 
                                  'Performance Fee payable (excl Vat)'],
                        index = [Advisor + ' (' + Monthname + ')'])
-
     # Third dataframe is multiplying and calculating the percentage payable for the respective advisor with date index too
     df3 = pd.DataFrame(data = [[abs(df2.iloc[: , 2].sum()),
                                abs(df2.iloc[: , 3].sum())]],
@@ -461,20 +478,19 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
                                           'Performance Fee payable (' + str(PerfFee*100) + '%)'],index=df2.index)
     
 
-    
     # Create writer instance e.g "Rosebank 31st August LTD.xlsx" 
-    writer = pd.ExcelWriter(Advisor + ' ' + Monthname + ' ' + currencytype + ".xlsx", engine='xlsxwriter')
+    writer = pd.ExcelWriter(AdvisorClean + ' ' + Monthname + ' ' + currencytype + ".xlsx", engine='xlsxwriter')
     
-    # Write all previous dataframes to excel, 1 being on date sheet, and 2,3 being on Advisor Fees sheet
+    # Write all previous dataframes to excel, 1 being on date sheet, and 2,3 being on Advisor Fees sheet    
     df1.to_excel(writer, sheet_name= Monthname)
-    df2.to_excel(writer, sheet_name= Advisor + ' Fees')
-    df3.to_excel(writer, sheet_name= Advisor + ' Fees', startrow = df2.shape[0] + 3)
+    df2.to_excel(writer, sheet_name= fee_sheet)
+    df3.to_excel(writer, sheet_name= fee_sheet, startrow = df2.shape[0] + 3)
     
     # Create workbook instance to allow sheet manipulation
     workbook  = writer.book
     # Call sheets instance
     worksheet1 = writer.sheets[Monthname]
-    worksheet2 = writer.sheets[Advisor + ' Fees']
+    worksheet2 = writer.sheets[fee_sheet]
     # Formatting of entire workbook 
     format1 = workbook.add_format({'num_format': Whatformat(file_1)})
     totalformat = workbook.add_format({'bold': True, 'bg_color':'#122057','border': 1,'text_wrap': True,
@@ -539,7 +555,7 @@ if __name__ == '__main__':
     # Size of GUI
     front.minsize(width=50, height=50)
     # Title of GUI
-    front.title('Advisor monthly sheet generator')
+    front.title('Sheet Gen')
     # Allow to not be resizable
     front.resizable(0,0)
     
@@ -566,10 +582,6 @@ if __name__ == '__main__':
     ThirdMonth = StringVar(new)
     Advisornew = StringVar(new)
     
-    # Quarterly variable
-    DateRangeEntry = Entry(new,width=20)
-    DateRangeEntry.grid(row=3,column = 1)
-    Label(new, text = 'Date Range').grid(row=2,column=1)
     
     # Pivot instantiate
     Piv = tk.Toplevel(front)
@@ -600,10 +612,11 @@ if __name__ == '__main__':
     Labels = ["Admin Sheet Name","Advisor Sheet Name",
              "Key Sheet Name","Admin investor column name","Advisor investor column name","Admin series column name",
               "Advisor series column name","Admin Management Fee column name","Admin Performance Fee column name",
-              "Admin columns start row","Advisor columns start row","Key columns start row","Column range (e.g: A:T)"]
+              "Admin columns start row","Advisor columns start row","Key columns start row","Column range (e.g: A:T)",
+             "Make Pivot Investor Name"]
     
     # Create Quarterly tab labels
-    Q_Labels = ["Invoice 1","Invoice 2","Invoice 3","Advisor","Date range"]
+    Q_Labels = ["Invoice 1","Invoice 2","Invoice 3"]
     
     # Advanced options tab labels and grid placements
     Label(master, text = Labels[0]).grid(row = 2, column = 0)
@@ -619,8 +632,10 @@ if __name__ == '__main__':
     Label(master, text = Labels[10]).grid(row = 10, column = 1)
     Label(master, text = Labels[11]).grid(row = 10, column = 2)
     Label(master, text = Labels[12]).grid(row = 12, column = 2)
+    Label(master, text = Labels[13]).grid(row = 13, column = 0)
+    
     # Make dictionary with keys and values being entries
-    for i in range (4,17):
+    for i in range (4,18):
         d["e{0}".format(i)] = Entry(master,width = 60)
 
     d["e4"].grid(row = 3, column = 0)
@@ -636,6 +651,7 @@ if __name__ == '__main__':
     d["e14"].grid(row = 11, column = 1)
     d["e15"].grid(row = 11, column = 2)
     d["e16"].grid(row = 13, column = 2)
+    d['e17'].grid(row = 14, column = 0)
     
     # Define variable that disables or enables grid in Advanced options tab
     var1 = IntVar()
@@ -681,7 +697,7 @@ if __name__ == '__main__':
     # Create quarterly invoices - Function contains GUI variables, labels, and positions.
     def quarterly():
         # Position the labels
-        for i in range (0,len(Q_Labels)-2):
+        for i in range (0,3): 
             Label(new, text = Q_Labels[i]).grid(row=0,column=i)
         # Month option menus which take advisorfiles array that is any file with "31st" in it 
         Month1 = OptionMenu(new, FirstMonth,*AdvisorFiles).grid(row=1,column=0)
@@ -690,9 +706,6 @@ if __name__ == '__main__':
         FirstMonth.set(AdvisorFiles[-1])
         SecondMonth.set(AdvisorFiles[-1])
         ThirdMonth.set(AdvisorFiles[-1])
-        # Advisor option menu which takes Keys array that is the indices of the key file (empty in beginning until refresh)
-        Advisor1 = OptionMenu(new, Advisorname,*Keys).grid(row=3,column=0)
-        Label(new, text = 'Advisor').grid(row=2,column=0)
         # Buttons to call merge function, destroy, and refresh
         b8 = Button(new, text='Merge files',command=lambda: 
                     (initialvalues(**d),Merge()),bg = 'green').grid(row=4,column =1)
@@ -714,21 +727,22 @@ if __name__ == '__main__':
                                                                                    Range,currencytype))
                                                                         ,bg='green').grid(row=6,column=1)
     b3 = Button(front, text='Join Invoices',command=lambda: (initialvalues(**d),new.deiconify(),quarterly()),
-                bg='Orange').grid(row=6,column=2)
+                bg='Orange').grid(row=8,column=1)
+    
     b4 = Button(front, text='Advanced Options',command=lambda: master.deiconify(),bg='Cyan').grid(row=7,column=2)
     b5 = Button(front, text='Quit', command=lambda: (master.destroy(),new.destroy(),front.destroy()),bg ='IndianRed4').grid(row=6, column=0, sticky=W, pady=4)
     b9 = Button(front, text = 'Refresh',command = lambda: initialvalues(**d),bg='White').grid(row=7,column=0,sticky=W)
-    b10 = Button(front, text='Make RMB Pivot',command=lambda: Piv.deiconify(),bg='Purple').grid(row=8,column=2)
+    b10 = Button(front, text='Make RMB Pivot',command=lambda: Piv.deiconify(),bg='Purple').grid(row=7,column=1)
     
     #Piv buttons
     Generate = Button(Piv, text ="Make Pivot Table",command = lambda:(initialvalues(**d),
                                                                         makepivot(file_admin,Values,Broker,Investor_admin
-                                                                                 ,Series_admin))
+                                                                                 ,Series_admin,skiprows_admin,Range,Bank))
                       ,bg = 'orange').grid(row = 6, column = 1)
     Ref = Button(Piv, text = "Refresh",command = lambda:(initialvalues(**d)), bg = 'white').grid(row = 6, column = 2)
-    Quit = Button(Piv, text = 'Quit',command = lambda: Piv.withdraw(),bg = 'red').grid(row = 6, column = 0)
+    Quit = Button(Piv, text = 'Hide Menu',command = lambda: Piv.withdraw(),bg = 'IndianRed4').grid(row = 6, column = 0)
 
-    
+
     # Initialise variables before running mainloop
     initialvalues(**d)
     # Run main loop
