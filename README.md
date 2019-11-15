@@ -2,23 +2,33 @@
 ![Image of interface 2019/09/08](https://github.com/WorstLuck/PolarStar/blob/master/Current%20Interface.png)
 
 # Summary
-This is an application that automatically generates invoices associated with a particular index by taking a dataset in the form of an "xlsx" or "xls" file as well as two reference datasets that are used to match each index and associate the appropriate fees to based on their key/value pairs.
+This is an application that automatically generates invoices associated with a particular index by taking a dataset in the form of an "xlsx" or "xls" file as well as two reference datasets that are used to match each index and associate the appropriate fees to based on their key/value pairs. The user then has an option to merge invoices as well as create pivot tables based on their chosen index. 
 
 The invoice generated has two sheets, one is the respective rows sampled from the original dataset and the other is an aggregate calculation summing up two types of fees involved.
 
-These invoices can be generated for any index chosen by the user.
+These invoices can be generated for any index chosen by the user. 
 
 Note: Results.txt is just there to load previously saved form inputs.
 
 # Monthly generation steps:
 Note: The first step is to make sure Results.txt as well atleast one excel file with names "ltd" or "qlhf" in the dist folder.
 
+# Section 1.
 1) Executable can be found in SheetGen > dist launch it and wait for GUI to pop up.
 2) Pick from the menu the Admin File name as well as the reference files for both Advisors and Key files.
-3) Write down the advisor name you wish to generate the invoice for
-4) Pick a date from the dropdown menu for the invoice
-5) Make sure the advanced options tab has the correct inputs (Refer to Advanced Options Inputs section at the end for explanations)
+3) Refer to Section 2 to create an RMB pivot before you continue if needed
+4) Chose the advisor from the menu that you wish to generate the invoice for
+5) Pick a date from the dropdown menu 
+6) Make sure the advanced options tab has the correct inputs (Refer to Advanced Options Inputs section at the end for explanations)
 6) Press "Receive file"
+
+# Section 2.
+1) Press Make RMB pivot
+2) Choose your Admin and RMB files from the drop-down menu
+3) Refresh 
+4) Pick the values and Broker Corporate column names and press Make Pivot Table
+5) The program should then write to a file with the name "RMB_split_rmb table.xlsx"
+6) Continue from step 3 in Section 1.
 
 Following the Receive File command the program will either:
 1) Generate a master file for which it advises you to fill in unassigned advisors - during which you can rerun the "Receive file" command once you edit the file to generate the invoice.
@@ -29,15 +39,12 @@ Following the Receive File command the program will either:
 There are several warnings that are generated:
 1) WARNING: You created x invoice but Admin File indicates another Date\
 This warning occurs when one tries to generate an invoice using an admin file from the previous month instead of the month specified by the date chosen.
+2) ERROR: "Toplevel entry!" Restart the application to fix this problem.
 2) ERROR: One of Management Fee or Performance Fee are spelled wrong\
 This indicates that either one or both of those two are spelled wrong, or, the data could not be written because of invalid entries in the advanced options tab.
 
-# Quarterly generation steps:
-Note: The first step is to make sure that there exists atleast one advisor invoice containing "31st" in the file name.
-
-Press the "Quarterly" button and input all three monthly sheets names that you generated, as well as the advisor name and date range.
-
-Press merge files and the excel file should be created in dist.
+# Quarterly generation steps / Invoice joining :
+Press the Join Invoices button and pick your 3 invoices followed by "Merge File" to generate a file with the suffix "Full"
 
 # Terminology:
 Admin File refers to the admin file that is received\
