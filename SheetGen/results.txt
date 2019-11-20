@@ -1,4 +1,4 @@
-200 Investor Allocation
+200_Profit Alloc
 Advisor Split
 KEY
 Investor

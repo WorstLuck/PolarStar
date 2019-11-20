@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[8]:
 
 
 import pandas as pd
@@ -13,6 +13,8 @@ import os
 def initialvalues(**d):
     print('--------------------------------')
     print("Starting initialisation process")
+    
+    global year
     # Advanced options labels
     global sheet_name_admin
     global Investor_admin
@@ -68,6 +70,7 @@ def initialvalues(**d):
     #Bank to pivot
     global Bank
     
+    year = '2019'
     # Dropdown menu variables
     if '.xlsx' in ' '.join(os.listdir()) or 'xls' in ' '.join(os.listdir()):
         RefFiles = [element for element in os.listdir() if ('xlsx' in element.lower() or 'xls' in element.lower())]
@@ -97,11 +100,11 @@ def initialvalues(**d):
     file_admin = RMB.get()
     admin = adminvar.get()
 
-# # # # Set initial values (To reduce time)
-#     adminvar.set('Polar Star Ltd_NAV Workbook_31-10-2019.xlsx')
-#     advisorvar.set('Master 31st October Ltd.xlsx')
-#     keyvar.set('Polar_Star_Fund_Ltd-Rebate(Advisor)-Abdullah-August-2019.xlsx')
-# #     Date.set('31st September')
+# # # # # Set initial values (To reduce time)
+#     adminvar.set('9914_9971_Polar Star SNN QIHF_NAV Workbook_31-10-2019.xls')
+#     advisorvar.set('Master 31st October QIHF.xlsx')
+#     keyvar.set('Polar Star SNN QIHF - Rebate (Advisor) - Abdullah - July 2019.xls')
+#     Date.set('31st October')
 
     # File name
     file_1 = adminvar.get()
@@ -264,18 +267,92 @@ def QuarterMerge():
     # Just an empty list we use later for storing ExcelFiles 
     deez = []
     
-    FinalWrite = pd.ExcelWriter(file1.split('31st')[0] + 'Final' + '.xlsx', engine='xlsxwriter')
+    # Dollar or rand fund
+    try:
+        Type = file1.split(' ')[-2]
+    except:
+        print("ERROR: FILES ARE NOT PRODUCTS OF MERGES")
+    
+    FinalWrite = pd.ExcelWriter(file1.split('31st')[0] + Type +  ' Final' + '.xlsx', engine='xlsxwriter')
     Endbook = FinalWrite.book
     formatf = Endbook.add_format({'num_format': Whatformat(file1)}) 
-    formatblue = Endbook.add_format({'fg_color': '#122057','font_size':30})
     format_zero = Endbook.add_format({'font_color': 'red'})
     formatperc = Endbook.add_format({'num_format': '#,##0.00%'})  
     total_format = Endbook.add_format({'bold': True, 'bg_color':'#FF5A34','border': 1,'text_wrap': True,
                                          'num_format': Whatformat(file1)})
+    total_format2 = Endbook.add_format({'bold': True, 'border': 1,'text_wrap': True,
+                                         'num_format': Whatformat(file1)})
+    formatblue = Endbook.add_format({'fg_color': '#122057','font_size':30})
+    formatblue2 = Endbook.add_format({'bold': True, 'bg_color':'#122057','border': 1,'text_wrap': True,
+                                       'font_color':'white'})
+    formatblue2.set_center_across()
+
     try:
         dff1 = pd.ExcelFile(file1)
         deez.append(dff1)
-        for element in dff1.sheet_names[:-1:]:  
+    except:
+        print("Couldnt load file 1")
+    try:
+        dff2 = pd.ExcelFile(file2)
+        deez.append(dff2)
+    except:
+        print("Couldnt load file 2")
+    try:
+        dff3 = pd.ExcelFile(file3)
+        deez.append(dff3)
+    except:
+        print("Couldnt load file 3")
+    
+    Yo = [file1,file2,file3]
+    What = [element for element in Yo if element != 'None']
+    Final = []
+    ok = []
+    
+    # Really hard to explain what's going on here , displays should clarify
+    
+    for i in range (0,len(What)):
+        s[i] = pd.read_excel(Yo[i],sheet_name = deez[i].sheet_names[0])
+        # These two are just to know how many advisor combos (Ashburton/Sanlam and ashburton etc.) we have
+        numadv = pd.read_excel(Yo[i], sheet_name = 1)
+        uniques = len(list(numadv['Advisor'].unique()))
+        cols = s[i].columns[0:2]
+        Monthname = s[i].index[3]
+        Final.append(s[i].iloc[4: 5+uniques])
+        Final[i].columns = s[i].iloc[3]
+        s[i] = s[i].iloc[4:4+uniques:,2:4]
+        s[i].columns = cols
+        ok.append(s[i])
+        TotalMg = Final[i].loc['Total','Management Fee payable (excl Vat)']
+        TotalPr = Final[i].loc['Total','Performance Fee payable (excl Vat)']
+        if i == 0:
+            row = uniques + 3
+        else:
+            row = (i-1)*Final[i].shape[0] + Final[1].shape[0] + 3*i + 3 + uniques
+        Final[i].to_excel(FinalWrite, sheet_name = file1.split('31st')[0] + 'Fees', startrow = row)
+        Quartersheet = FinalWrite.sheets[file1.split('31st')[0] + 'Fees']
+        Quartersheet.write(row,0,Monthname,formatblue2)
+        Quartersheet.write(row + 1 + uniques , 3,TotalMg,total_format2)
+        Quartersheet.write(row + 1 + uniques , 4,TotalPr,total_format2)
+        colour(Final[i],Quartersheet,row,Endbook,'#122057')
+    Quartersheet.set_column('A:F',35,formatf)
+    Quartersheet.conditional_format(1, 1, 50,10 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+    
+    Total = pd.concat([element for element in ok])
+    TotalSum = Total.groupby(level=0,sort=False).sum()
+    TotalSum.to_excel(FinalWrite, sheet_name = file1.split('31st')[0] + 'Fees', startrow = 0)
+    colour(TotalSum,Quartersheet,0,Endbook,'#122057')
+    
+    Quartersheet.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+    Quartersheet.write(0,0,'',formatblue)
+    
+    for k in range (0,uniques):
+        Quartersheet.write(k+1,1,TotalSum.iloc[k][0],total_format)
+        Quartersheet.write(k+1,2,TotalSum.iloc[k][1],total_format)
+    try:
+        for element in dff1.sheet_names[1::]:  
             f1[dff1.sheet_names.index(element)] = pd.read_excel(file1,sheet_name = element)
             fdummy1 = f1[dff1.sheet_names.index(element)]
             fdummy1.to_excel(FinalWrite,sheet_name = element)
@@ -294,9 +371,7 @@ def QuarterMerge():
     except:
         print("Couldnt load 1")
     try:
-        dff2 = pd.ExcelFile(file2)
-        deez.append(dff2)
-        for element in dff2.sheet_names[:-1:]:  
+        for element in dff2.sheet_names[1::]:  
             f2[dff2.sheet_names.index(element)] = pd.read_excel(file2,sheet_name = element)
             fdummy2 = f2[dff2.sheet_names.index(element)]
             fdummy2.to_excel(FinalWrite,sheet_name = element)
@@ -315,9 +390,7 @@ def QuarterMerge():
     except:
         print("Couldnt load 2")
     try:
-        dff3 = pd.ExcelFile(file3)
-        deez.append(dff3)
-        for element in dff3.sheet_names[:-1:]:  
+        for element in dff3.sheet_names[1::]:  
             f3[dff3.sheet_names.index(element)] = pd.read_excel(file3,sheet_name = element)
             fdummy3 = f3[dff3.sheet_names.index(element)] 
             fdummy3.to_excel(FinalWrite,sheet_name = element)
@@ -336,45 +409,6 @@ def QuarterMerge():
     except:
         print("Couldnt load 3")
     
-    Yo = [file1,file2,file3]
-    What = [element for element in Yo if element != 'None']
-    
-    # Really hard to explain what's going on here , displays should clarify
-    for i in range (0,len(What)):
-        s[i] = pd.read_excel(Yo[i],sheet_name = deez[i].sheet_names[-1])
-        Result[i] = s[i].iloc[len(deez[i].sheet_names) +2:]
-        Result[i].columns = Result[i].iloc[0]
-        Result[i] = Result[i].drop(Result[i].index[0])
-        Result[i] = Result[i].iloc[:,0:2]
-        s[i] = s[i].iloc[:len(deez[i].sheet_names)]
-        TotalMg = s[i].loc['Total','Management Fee payable (excl Vat)']
-        TotalPr = s[i].loc['Total','Performance Fee payable (excl Vat)']
-        if i == 0:
-            row = 0
-        else:
-            row = (i-1)*s[i].shape[0] + s[1].shape[0] + 3*i
-        s[i].to_excel(FinalWrite, sheet_name = file1.split('31st')[0] + 'Fees', startrow = row)
-        Quartersheet = FinalWrite.sheets[file1.split('31st')[0] + 'Fees']
-        Quartersheet.insert_image(row,0, 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
-        Quartersheet.write(row,0,'',formatblue)
-        Quartersheet.write(row + len(deez[i].sheet_names) , 3,TotalMg,total_format)
-        Quartersheet.write(row + len(deez[i].sheet_names) , 4,TotalPr,total_format)
-        colour(s[i],Quartersheet,row,Endbook,'#122057')
-    Quartersheet.set_column('A:F',35,formatf)
-    Quartersheet.conditional_format(1, 1, 50,10 , {'type':     'cell',
-                                          'criteria': '==',
-                                          'value':    0,
-                                          'format':   format_zero})
-    
-    Total = pd.concat([element for element in Result.values()])
-    TotalSum = Total.groupby(level=0).sum()
-    TotalSum.to_excel(FinalWrite, sheet_name = file1.split('31st')[0] + 'Fees', startrow = row + 3 + 
-                      len(deez[i].sheet_names))
-    colour(TotalSum,Quartersheet,row + 3 + len(deez[i].sheet_names),Endbook,'#122057')
-    SumMg = TotalSum.iloc[0][0]
-    SumPf = TotalSum.iloc[0][1]
-    Quartersheet.write(row + 4 + len(deez[i].sheet_names),1,SumMg,total_format)
-    Quartersheet.write(row + 4 + len(deez[i].sheet_names),2,SumPf,total_format)
     FinalWrite.save()
                           
     
@@ -391,71 +425,33 @@ def Merge():
     format_zero = workbook2.add_format({'font_color': 'red'})
     formatperc = workbook2.add_format({'num_format': '#,##0.00%'})
     try:
-        df_f1 = pd.read_excel(file1)
+        df_f1 = pd.read_excel(file1,sheet_name =  1)
         df_tf1 = pd.read_excel(file1, sheet_name = file1.split('31st')[0] + 'Fees')
-        df_f1.to_excel(writer2, sheet_name = file1.split('31st')[0] + file1.split(' 31st ')[1][0:3])
-        worksheet_1 = writer2.sheets[file1.split('31st')[0] + file1.split(' 31st ')[1][0:3]]
-        worksheet_1.set_column('A:D',35)
-        worksheet_1.set_column('E:E',35,formatperc)
-        worksheet_1.set_column('E:U',35,formatf)
-        colour(df_f1,worksheet_1,0,workbook2,'#122057')
-        worksheet_1.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
-        worksheet_1.conditional_format(1, 4, df_f1.shape[0],19 , {'type':     'cell',
-                                          'criteria': '==',
-                                          'value':    0,
-                                          'format':   format_zero})
-        worksheet_1.write('A1','',formatblue)
-        df_joined = abs(df_tf1.iloc[[0]])
-        MgtFee = [float(df_tf1.iloc[3][0].split('(')[1].split('%')[0])/100]
-        PerfFee = [float(df_tf1.iloc[3][1].split('(')[1].split('%')[0])/100]
-        print('{} Added as {}'.format(file1 + ' Sheet: ' + Monthname , str(file1).split('31st')[0]))
+        dff1 = pd.ExcelFile(file1)
+        Monthname = dff1.sheet_names[1]
+        df_joined = abs(df_tf1.iloc[[4]])
+        MgtFee = [float(df_tf1.columns[0].split('(')[1].split('%')[0])/100]
+        PerfFee = [float(df_tf1.columns[1].split('(')[1].split('%')[0])/100]
     except:
-        print("ERROR: Please enter an invoice file!")
-    
+        print("WARNING: Invoice 1 not loaded")
     try:
-        df_f2 = pd.read_excel(file2)
+        df_f2 = pd.read_excel(file2,sheet_name = 1)
         df_tf2 = pd.read_excel(file2, sheet_name = file2.split('31st')[0] + 'Fees')
-        df_f2.to_excel(writer2, sheet_name = file2.split('31st')[0] + file2.split(' 31st ')[1][0:3])
-        worksheet_2 = writer2.sheets[file2.split('31st')[0] + file2.split(' 31st ')[1][0:3]]
-        colour(df_f2,worksheet_2,0,workbook2,'#122057')
-        worksheet_2.set_column('A:D',35)
-        worksheet_2.set_column('E:E',35,formatperc)
-        worksheet_2.set_column('F:U', 35, formatf)
-        worksheet_2.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
-        worksheet_2.conditional_format(1, 4, df_f2.shape[0],19 , {'type':     'cell',
-                                          'criteria': '==',
-                                          'value':    0,
-                                          'format':   format_zero})
-        worksheet_2.write('A1','',formatblue)
-        df_joined = pd.concat([abs(df_tf1.iloc[[0]]),abs(df_tf2.iloc[[0]])])
-        MgtFee.append(float(df_tf2.iloc[3][0].split('(')[1].split('%')[0])/100)
-        PerfFee.append(float(df_tf2.iloc[3][1].split('(')[1].split('%')[0])/100)
-        print('{} Added as {}'.format(file2 + ' Sheet: ' + Monthname , str(file2).split('31st')[0]))  
+        df_joined = pd.concat([abs(df_tf1.iloc[[4]]),abs(df_tf2.iloc[[4]])])
+        MgtFee.append(float(df_tf2.columns[0].split('(')[1].split('%')[0])/100)
+        PerfFee.append(float(df_tf2.columns[1].split('(')[1].split('%')[0])/100)
     except:
-        print('WARNING: Invoice 2 not loaded')
-    
-    try: 
-        df_f3 = pd.read_excel(file3)
+        print("WARNING: Invoice 2 not loaded")
+    try:
+        df_f3 = pd.read_excel(file3,sheet_name =  1)
         df_tf3 = pd.read_excel(file3, sheet_name = file3.split('31st')[0] + 'Fees')
-        df_f3.to_excel(writer2, sheet_name = file3.split('31st')[0] + file3.split(' 31st ')[1][0:3])
-        worksheet_3 = writer2.sheets[file3.split('31st')[0] + file3.split(' 31st ')[1][0:3]]
-        colour(df_f3,worksheet_3,0,workbook2,'#122057')
-        worksheet_3.set_column('A:D',35)        
-        worksheet_3.set_column('E:E',35,formatperc)
-        worksheet_3.set_column('F:U', 35, formatf)
-        worksheet_3.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
-        worksheet_3.conditional_format(1, 4, df_f3.shape[0],19 , {'type':     'cell',
-                                          'criteria': '==',
-                                          'value':    0,
-                                          'format':   format_zero})
-
-        worksheet_3.write('A1',None,formatblue)
-        df_joined = pd.concat([abs(df_tf1.iloc[[0]]),abs(df_tf2.iloc[[0]]),abs(df_tf3.iloc[[0]])])
-        MgtFee.append(float(df_tf3.iloc[3][0].split('(')[1].split('%')[0])/100)
-        PerfFee.append(float(df_tf3.iloc[3][1].split('(')[1].split('%')[0])/100)
-        print('{} Added as {}'.format(file3 + ' Sheet: ' + Monthname , str(file3).split('31st')[0]))
+        df_joined = pd.concat([abs(df_tf1.iloc[[4]]),abs(df_tf2.iloc[[4]]),abs(df_tf3.iloc[[4]])])
+        MgtFee.append(float(df_tf3.columns[0].split('(')[1].split('%')[0])/100)
+        PerfFee.append(float(df_tf3.columns[1].split('(')[1].split('%')[0])/100)
     except:
-        print("WARNING: Invoice 3 not loaded")     
+        print("WARNING: Invoice 3 not loaded")
+        
+    df_joined.columns = df_tf1.iloc[3]
     dfsum = pd.DataFrame([abs(df_joined.sum())],index=['Total'])
     Totals = [abs(df_joined.iloc[: , 2].sum()),abs(df_joined.iloc[: , 3].sum())]
     TotalsFirst = [abs(df_joined.iloc[: , 0].sum()),abs(df_joined.iloc[: , 1].sum())]
@@ -464,26 +460,64 @@ def Merge():
                                df_joined.columns[1] + '\n' + '(' + " , ".join(str(x*100) + '%' for x in PerfFee) + ')' ],
                                   index = ['Total payable'])
     df_joined = pd.concat([df_joined,dfsum])
-    df_joined.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees')
-    df_portion.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees' ,startrow = df_joined.shape[0] + 3)
+    df_portion.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees')
+    df_joined.to_excel(writer2, sheet_name = file1.split('31st')[0] + 'Fees' ,startrow = df_portion.shape[0] + 3)
+                     
+    try:
+        df_f1.to_excel(writer2, sheet_name = file1.split('31st')[0] + file1.split(' 31st ')[1][0:3])
+        worksheet_1 = writer2.sheets[file1.split('31st')[0] + file1.split(' 31st ')[1][0:3]]
+        worksheet_1.set_column('A:D',35)
+        worksheet_1.set_column('E:E',35,formatperc)
+        worksheet_1.set_column('E:U',35,formatf)
+        worksheet_1.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
+        worksheet_1.conditional_format(1, 4, df_f1.shape[0],19 , {'type':     'cell',
+                                          'criteria': '==',
+                                          'value':    0,
+                                          'format':   format_zero})
+        worksheet_1.write('A1','',formatblue)
+        colour(df_f1,worksheet_1,0,workbook2,'#122057')
+        print('{} Added as {}'.format(file1 + ' Sheet: ' + Monthname , str(file1).split('31st')[0]))
+    except:
+        print("ERROR: Please enter an invoice file!")
+    
+    try:
+        da2 = df_f1.append(df_f2)
+        da2.to_excel(writer2, sheet_name = file1.split('31st')[0] + file1.split(' 31st ')[1][0:3])
+        colour(da2,worksheet_1,0,workbook2,'#122057')
+        print('{} Added as {}'.format(file2 + ' Sheet: ' + Monthname , str(file2).split('31st')[0]))  
+    except:
+        print('WARNING: Invoice 2 not loaded')
+    
+    try: 
+        da3 = df_f1.append(df_f2.append(df_f3))
+        da3.to_excel(writer2, sheet_name = file1.split('31st')[0] + file1.split(' 31st ')[1][0:3])
+        colour(da3,worksheet_1,0,workbook2,'#122057')
+        print('{} Added as {}'.format(file3 + ' Sheet: ' + Monthname , str(file3).split('31st')[0]))
+    except:
+        print("WARNING: Invoice 3 not loaded")    
+        
     worksheet_final = writer2.sheets[file1.split('31st')[0] + 'Fees']
     worksheet_final.set_column('A:E',35,formatf)
     
     #Formattings
     total_format = workbook2.add_format({'bold': True, 'bg_color':'#FF5A34','border': 1,'text_wrap': True,
                                          'num_format': Whatformat(file1)})
+    totalformat = workbook2.add_format({'bold': True, 'bg_color':'#122057','border': 1,'text_wrap': True,
+                                       'font_color':'white'})
+    totalformat.set_center_across()
     total_format.set_center_across()
     hench_format2 = workbook2.add_format({'bold': True,'text_wrap': True,'border':1,'num_format': Whatformat(file1)})
     
-    worksheet_final.write(df_joined.shape[0],1,TotalsFirst[0],hench_format2)
-    worksheet_final.write(df_joined.shape[0],2,TotalsFirst[1],hench_format2)
-    worksheet_final.write(df_joined.shape[0],3,Totals[0],hench_format2)
-    worksheet_final.write(df_joined.shape[0],4,Totals[1],hench_format2)
-    worksheet_final.write(df_joined.shape[0] + 4,1, Totals[0], total_format)
-    worksheet_final.write(df_joined.shape[0] + 4,2, Totals[1], total_format)
-    colour(df_joined,worksheet_final,0,workbook2,'#122057')
-    colour(df_portion,worksheet_final,df_joined.shape[0] + 3,workbook2,'#122057')
-    worksheet_final.conditional_format(1, 1, df_joined.shape[0]-1,10 , {'type':     'cell',
+    worksheet_final.write(df_portion.shape[0] + 3,0, Monthname + ' ' + year,totalformat)
+    worksheet_final.write(df_portion.shape[0] + df_joined.shape[0] + 3,1,TotalsFirst[0],hench_format2)
+    worksheet_final.write(df_portion.shape[0] + df_joined.shape[0] + 3,2,TotalsFirst[1],hench_format2)
+    worksheet_final.write(df_portion.shape[0] + df_joined.shape[0] + 3,3,Totals[0],hench_format2)
+    worksheet_final.write(df_portion.shape[0] + df_joined.shape[0] + 3,4,Totals[1],hench_format2)
+    worksheet_final.write(df_portion.shape[0],1, Totals[0], total_format)
+    worksheet_final.write(df_portion.shape[0],2, Totals[1], total_format)
+    colour(df_joined,worksheet_final,df_portion.shape[0] + 3,workbook2,'#122057')
+    colour(df_portion,worksheet_final,0,workbook2,'#122057')
+    worksheet_final.conditional_format(1, 1, 10,10 , {'type':     'cell',
                                           'criteria': '==',
                                           'value':    0,
                                           'format':   format_zero})
@@ -602,7 +636,8 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
                        columns =['Management Fee Total (excl Vat)','Performance Fee Total (excl Vat)', 
                                  'Management Fee payable (excl Vat)', 
                                  'Performance Fee payable (excl Vat)'],
-                       index = [Advisor + ' (' + Monthname + ')'])
+                       index = [Advisor])
+
     # Third dataframe is multiplying and calculating the percentage payable for the respective advisor with date index too
     df3 = pd.DataFrame(data = [[abs(df2.iloc[: , 2].sum()),
                                abs(df2.iloc[: , 3].sum())]],
@@ -611,11 +646,12 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
 
     # Create writer instance e.g "Rosebank 31st August LTD.xlsx" 
     writer = pd.ExcelWriter(AdvisorClean + ' ' + Monthname + ' ' + currencytype + ".xlsx", engine='xlsxwriter')
-    
-    # Write all previous dataframes to excel, 1 being on date sheet, and 2,3 being on Advisor Fees sheet    
+        
+    # Write all previous dataframes to excel, 1 being on date sheet, and 2,3 being on Advisor Fees sheet 
+    df3.to_excel(writer, sheet_name= fee_sheet)
+    df2.to_excel(writer, sheet_name= fee_sheet, startrow = df3.shape[0] + 3)
     df1.to_excel(writer, sheet_name= Monthname)
-    df2.to_excel(writer, sheet_name= fee_sheet)
-    df3.to_excel(writer, sheet_name= fee_sheet, startrow = df2.shape[0] + 3)
+    
     
     # Create workbook instance to allow sheet manipulation
     workbook  = writer.book
@@ -643,10 +679,8 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
     
     worksheet2.write(df2.shape[0],1,df2.iloc[: , 0],hench_format3)
     worksheet2.write(df2.shape[0],2,df2.iloc[: , 1],hench_format3)
-    worksheet2.write(df2.shape[0],3,df2.iloc[: , 2],hench_format3)
-    worksheet2.write(df2.shape[0],4,df2.iloc[: , 3],hench_format3)
-    worksheet2.write(df2.shape[0]+4,1,df2.iloc[: , 2].sum(), hench_format2)
-    worksheet2.write(df2.shape[0]+4,2,df2.iloc[: , 3].sum(), hench_format2)
+    worksheet2.write(df2.shape[0],1,df2.iloc[: , 2].sum(), hench_format2)
+    worksheet2.write(df2.shape[0],2,df2.iloc[: , 3].sum(), hench_format2)
     
     # Set columns of first date sheet and second Advisor Fees sheet to be (Dollar or Rand and Size)\
     worksheet1.set_column('A:D', 35)
@@ -656,16 +690,19 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
     except:
         worksheet1.set_column('E:E', 35)
     worksheet1.set_column('F:U', 35, format1)
+    
     #Insert image
     worksheet1.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
     worksheet2.insert_image('A1', 'ps_logo_home.png',{'x_offset':40,'y_offset':5,'x_scale': 0.25,'y_scale': 0.15})
     worksheet1.write('A1',None,format7)
     worksheet2.write('A1',None,format7)
+    worksheet2.write(df3.shape[0] + 3,0, Monthname + ' ' + year,totalformat)
+    
     worksheet1.conditional_format(1, 4, df1.shape[0],19 , {'type':     'cell',
                                           'criteria': '==',
                                           'value':    0,
                                           'format':   formatzero})
-    worksheet2.conditional_format(1, 1, df2.shape[0]-1,10 , {'type':     'cell',
+    worksheet2.conditional_format(1, 1, 10,10 , {'type':     'cell',
                                       'criteria': '==',
                                       'value':    0,
                                       'format':   formatzero})
@@ -676,8 +713,8 @@ def write(df_key,df_join,Advisor,Mgnt_admin,Perf_admin,file_1,Monthname,RMBSplit
         print("ERROR: No percentage from RMB written")
     # Colour all three dataframes using colour function where wraps, bold, aligns, border, colour can be changed
     colour(df1,worksheet1,0,workbook,'#122057')
-    colour(df2,worksheet2,0,workbook,'#122057')
-    colour(df3,worksheet2,df2.shape[0] + 3,workbook,'#122057')
+    colour(df2,worksheet2,df3.shape[0] + 3,workbook,'#122057')
+    colour(df3,worksheet2,0,workbook,'#122057')
     # Save the file
     writer.save()
     # Tell user that invoice has been written
@@ -716,8 +753,7 @@ if __name__ == '__main__':
     SecondMonth = StringVar(new)
     ThirdMonth = StringVar(new)
     Advisornew = StringVar(new)
-    
-    
+      
     # Pivot instantiate
     Piv = tk.Toplevel(front)
     Piv.title('Pivot Table Maker')
@@ -891,35 +927,12 @@ if __name__ == '__main__':
 # In[ ]:
 
 
-k = ['a','b','c']
-p = {0:'a'}
+def ata(x):
+    return x + 'ok'
 
-L = [element for element in p.values()]
-
-print(L)
-# print(k[-1])
-# for element in k[:-1:]:
-#     p[k.index(element)] = element
-        
-# print(len(p))
-
-
-# In[ ]:
-
-
-k = ['None','None','ata']
-
-p = [element for element in k if element != 'None']
-
-len(p)
-
-
-# In[ ]:
-
-
-df5= pd.DataFrame(data = [[1,2],[3,4]],columns=['A','B'])
-
-df5[df5['A' in df5.columns]]
+df = pd.DataFrame(data= [[1,2,3],[4,5,6]],columns=['a','b','c'],index=['Ok','bro'])
+df.index = df.index.map(ata)
+display(df)
 
 
 # In[ ]:
