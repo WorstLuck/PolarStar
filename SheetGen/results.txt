@@ -1,4 +1,4 @@
-200_Profit Alloc
+200 Investor Allocation
 Advisor Split
 KEY
 Investor
@@ -10,6 +10,5 @@ Performance Fee
 8
 1
 1
-A:T
 Rand Merchant Bank a Division of First Rand Bank Limited CPPI
 Opening Allocation Value
